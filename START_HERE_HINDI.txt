@@ -1,0 +1,15 @@
+MEENAMA DELIVERY — ONLINE UPLOAD PACKAGE
+
+Is folder mein teen web screens aur test backend hain.
+
+PHONE SE AGLE STEPS:
+1. ZIP ko download karke extract karein.
+2. GitHub par sign in karein aur New repository banayein (Private rakhna behtar hai).
+3. Is folder ke ANDAR ki files/folders repository ke root mein upload karein: server.js, package.json, render.yaml, public folder, aur baaki .txt files.
+4. Render par sign in karein, New + > Blueprint chun kar repository connect karein.
+5. Deploy ke baad Render ka URL milega. Is URL par customer app, /MeenaMa_Owner_Admin.html par admin preview, /MeenaMa_Delivery_Boy_App.html par delivery boy preview khulega.
+6. Health test: URL ke aakhir mein /api/health lagayein.
+
+IMPORTANT SAFETY: Yeh sirf preview/test starter hai. API par abhi secure role-based login nahi hai aur orders API ko koi bhi access kar sakta hai. Real customer details, payments ya public orders ke liye abhi use NA karein. Public launch se pehle secure login, role permissions aur managed database zaroori hain.
+
+Main aapke GitHub/Render account mein bina aapke sign-in/authorization ke publish nahi kar sakta. Yeh ZIP APK nahi hai; Android APK alag build hoga.

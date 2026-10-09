@@ -1,0 +1,24 @@
+MEENAMA DELIVERY — ONLINE PREVIEW DEPLOY STEPS
+
+IMPORTANT: Yeh TEST/PREVIEW backend hai. Abhi public customers ke liye production-safe nahi hai: login demo hai aur order API par proper role-based security nahi hai. Real customer data, payment details ya public orders is par use na karein.
+
+ONLINE HOST KARNE KE LIYE (Render Blueprint):
+1. ZIP ko phone/computer par extract karein.
+2. GitHub par sign in karke ek naya PRIVATE repository banayein.
+3. Extract kiye gaye online_backend folder ke andar ke sabhi files repository mein upload karein (render.yaml bhi).
+4. Render par sign in karein aur New + > Blueprint select karein.
+5. Apna GitHub repository connect karke Deploy karein. render.yaml server aur persistent data disk ka setup batata hai.
+6. Deploy hone par Render ek https://...onrender.com address dega. Us address par customer app khulega; /MeenaMa_Owner_Admin.html admin preview aur /MeenaMa_Delivery_Boy_App.html delivery boy preview hain.
+7. Health check ke liye apne address ke aage /api/health kholein; {"ok":true,...} aana chahiye.
+
+APP TEST ROUTES:
+/MeenaMa_Customer_App.html
+/MeenaMa_Owner_Admin.html
+/MeenaMa_Delivery_Boy_App.html
+/api/health
+/api/orders
+
+NOTE:
+- Is package ko main aapke Render/GitHub account mein khud publish nahi kar sakta; account access/authorization mere paas nahi hai. Aapko steps 2–5 khud tap karke karne honge.
+- Yeh HTML apps abhi APK nahi hain. Online hosting ke baad bhi installable Android APK alag build karna hoga.
+- Live GPS tracking, push notifications, secure owner/delivery logins, database role permissions aur payment gateway abhi production mein enabled nahi hain. Public launch se pehle security work zaroori hai.

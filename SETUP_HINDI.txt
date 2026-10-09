@@ -1,0 +1,20 @@
+MEENAMA DELIVERY — ONLINE BACKEND STARTER
+
+Is package mein 3 HTML screens aur shared order API ka starter server hai.
+
+LOCAL TEST (computer par):
+1. Node.js install karein.
+2. Is folder mein terminal/command prompt kholein.
+3. npm install
+4. npm start
+5. Browser mein http://localhost:3000 kholein.
+6. Customer app: http://localhost:3000/MeenaMa_Customer_App.html
+   Owner Admin: http://localhost:3000/MeenaMa_Owner_Admin.html
+   Delivery Boy: http://localhost:3000/MeenaMa_Delivery_Boy_App.html
+
+IMPORTANT:
+- Ye backend starter hai, abhi public internet par deploy nahi hua.
+- Cross-phone sync tabhi chalega jab server internet par deploy rahe aur sab log isi hosted URL ko use karein.
+- Abhi login demo hai; production se pehle secure accounts, password hashing, role-based access, database backups, HTTPS, order conflict handling aur push notifications zaroori hain.
+- Is starter ka JSON file database basic testing ke liye hai; real business ke liye managed database use karein.
+- Is package se APK automatically nahi banta aur Play Store par upload nahi hua.
