@@ -629,9 +629,24 @@ function closeProduct(){document.getElementById('productModal').classList.remove
 function getSavedOrders(){
  return JSON.parse(localStorage.getItem('mmorders')||'[]');
 }
-function saveOrders(a){localStorage.setItem('mmorders',JSON.stringify(a)); fetch('/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});}
-async function syncMeenaMaOrders(){try{const r=await fetch('/api/orders',{cache:'no-store'});if(!r.ok)return;const a=await r.json();if(Array.isArray(a))localStorage.setItem('mmorders',JSON.stringify(a));}catch(e){/* offline fallback: local orders remain available */}}
-setInterval(syncMeenaMaOrders,5000);window.addEventListener('load',syncMeenaMaOrders);
+function saveOrders(a){
+ localStorage.setItem('mmorders',JSON.stringify(a));
+ // Sync order changes to the shared server. Offline use remains available.
+ fetch('/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});
+}
+async function syncMeenaMaOrders(){
+ try {
+  const r=await fetch('/api/orders'); if(!r.ok)return;
+  const remote=await r.json(); if(!Array.isArray(remote))return;
+  const local=getSavedOrders(), map=new Map(remote.map(o=>[String(o.id),o]));
+  for(const o of local){const old=map.get(String(o.id));map.set(String(o.id),old?{...o,...old}:o);}
+  const merged=Array.from(map.values()); localStorage.setItem('mmorders',JSON.stringify(merged));
+  const current=JSON.parse(localStorage.getItem('mmorder')||'null');
+  if(current){const latest=merged.find(o=>String(o.id)===String(current.id));if(latest){localStorage.setItem('mmorder',JSON.stringify(latest));if(typeof renderCustomerOrder==='function')renderCustomerOrder(latest);}}
+  if(document.getElementById('adminOrders')&&document.getElementById('adminPanel')?.style.display==='block')renderAdminOrders();
+ } catch(e) {}
+}
+document.addEventListener('DOMContentLoaded',()=>{syncMeenaMaOrders();setInterval(syncMeenaMaOrders,8000)});
 function renderAdminOrders(){
  const el=document.getElementById('adminOrders');
  const orders=getSavedOrders();
