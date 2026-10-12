@@ -1,11 +1,12 @@
 services:
-  - type: web
-    name: meenama-delivery-preview
-    runtime: node
-    plan: free
-    buildCommand: npm install
-    startCommand: npm start
-    healthCheckPath: /api/health
-    envVars:
-      - key: NODE_ENV
-        value: production
+
+- type: web
+  name: meenama-delivery-2026
+  runtime: node
+  plan: free
+  buildCommand: npm install
+  startCommand: npm start
+  healthCheckPath: /api/health
+  envVars:
+  - key: NODE_ENV
+    value: production
