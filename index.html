@@ -695,5 +695,69 @@ document.addEventListener('DOMContentLoaded',()=>{loadCustomerProfile();setInter
 let mmDeferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();mmDeferredPrompt=e;const b=document.getElementById('installBtn');if(b)b.style.display='block';});
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='installBtn'&&mmDeferredPrompt){mmDeferredPrompt.prompt();mmDeferredPrompt.userChoice.finally(()=>{mmDeferredPrompt=null;e.target.style.display='none';});}});
-</script><div id="pinGate" class="pin-gate"><div class="pin-card"><h2>📍 MeenaMa Delivery</h2><p style="color:#68736b;margin-top:4px">Service area check</p><p>Apna <b>PIN code</b> dijiye. Abhi service area <b>712222</b> hai.</p><input id="gatePin" class="field" inputmode="numeric" maxlength="6" placeholder="Enter PIN code"><div id="gateMsg" style="font-size:13px;margin:5px 0"></div><button class="btn checkout" onclick="unlockServiceArea()">Continue</button><small style="display:block;margin-top:10px;color:#777">Baad me Admin Settings se aur PIN codes add kiye ja sakte hain.</small></div></div><script>function unlockServiceArea(){const pin=(document.getElementById('gatePin').value||'').trim();if(isAllowedPin(pin)){localStorage.setItem('mmactivePin',pin);document.getElementById('pinGate').style.display='none';document.getElementById('gateMsg').textContent='';}else{document.getElementById('gateMsg').textContent='❌ Is PIN me abhi service available nahi hai.';document.getElementById('gateMsg').className='pin-bad';}}function initPinGate(){const pin=localStorage.getItem('mmactivePin')||'';if(pin&&isAllowedPin(pin)){document.getElementById('pinGate').style.display='none';}else{document.getElementById('pinGate').style.display='flex';}}document.addEventListener('DOMContentLoaded',()=>setTimeout(initPinGate,50));</script>
+</script><div id="pinGate" class="pin-gate"><div class="pin-card"><h2>📍 MeenaMa Delivery</h2><p style="color:#68736b;margin-top:4px">Service area check</p><p>Apna <b>PIN code</b> dijiye. Abhi service area <b>712222</b> hai.</p><input id="gatePin" class="field" inputmode="numeric" maxlength="6" placeholder="Enter PIN code"><div id="gateMsg" style="font-size:13px;margin:5px 0"></div><button class="btn checkout" onclick="unlockServiceArea()">Continue</button><small style="display:block;margin-top:10px;color:#777">Baad me Admin Settings se aur PIN codes add kiye ja sakte hain.</small></div></div><script>function unlockServiceArea(){const pin=(document.getElementById('gatePin').value||'').trim();if(isAllowedPin(pin)){localStorage.setItem('mmactivePin',pin);document.getElementById('pinGate').style.display='none';document.getElementById('gateMsg').textContent='';}else{document.getElementById('gateMsg').textContent='❌ Is PIN me abhi service available nahi hai.';document.getElementById('gateMsg').className='pin-bad';}}function initPinGate(){const pin=localStorage.getItem('mmactivePin')||'';if(pin&&isAllowedPin(pin)){document.getElementById('pinGate').style.display='none';}else{document.getElementById('pinGate').style.display='flex';}}document.addEventListener('DOMContentLoaded',()=>setTimeout(initPinGate,50));</script><script>
+(function () {
+  const API = "https://meenama-delivery-app-9681.onrender.com/api/orders";
+  const KEY = "mmorders";
+  let syncing = false;
+
+  async function syncOrders() {
+    if (syncing) return;
+    syncing = true;
+
+    try {
+      const response = await fetch(API);
+      if (!response.ok) throw new Error("Server error");
+
+      const remote = await response.json();
+      const local = JSON.parse(localStorage.getItem(KEY) || "[]");
+      const merged = new Map();
+
+      remote.forEach(order => merged.set(String(order.id), order));
+      local.forEach(order => merged.set(String(order.id), {
+        ...(merged.get(String(order.id)) || {}),
+        ...order
+      }));
+
+      const orders = Array.from(merged.values());
+      localStorage.setItem(KEY, JSON.stringify(orders));
+
+      await fetch(API, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orders })
+      });
+
+      console.log("MeenaMa orders synced");
+    } catch (error) {
+      console.log("Sync pending:", error.message);
+    } finally {
+      syncing = false;
+    }
+  }
+
+  const oldSaveOrders = window.saveOrders;
+
+  window.saveOrders = function (orders) {
+    localStorage.setItem(KEY, JSON.stringify(orders));
+
+    fetch(API, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orders })
+    }).catch(error => console.log(error));
+
+    if (typeof oldSaveOrders === "function") {
+      try {
+        oldSaveOrders(orders);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  syncOrders();
+  setInterval(syncOrders, 15000);
+})();
+</script>
 </body></html>
