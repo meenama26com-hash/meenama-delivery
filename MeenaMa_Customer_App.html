@@ -632,11 +632,11 @@ function getSavedOrders(){
 function saveOrders(a){
  localStorage.setItem('mmorders',JSON.stringify(a));
  // Sync order changes to the shared server. Offline use remains available.
- fetch('/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});
+ fetch('https://meenama-delivery-app-9681.onrender.com/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});
 }
 async function syncMeenaMaOrders(){
  try {
-  const r=await fetch('/api/orders'); if(!r.ok)return;
+  const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/orders'); if(!r.ok)return;
   const remote=await r.json(); if(!Array.isArray(remote))return;
   const local=getSavedOrders(), map=new Map(remote.map(o=>[String(o.id),o]));
   for(const o of local){const old=map.get(String(o.id));map.set(String(o.id),old?{...o,...old}:o);}
