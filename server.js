@@ -103,6 +103,20 @@ app.put("/api/orders", (req, res) => {
   res.json({ ok: true, count: req.body.orders.length });
 });
 
+// Explicit app routes so Admin and Delivery Boy pages never fall back to customer index.
+app.get(["/admin", "/admin/", "/MeenaMa_Owner_Admin.html"], (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.sendFile(path.join(__dirname, "MeenaMa_Owner_Admin.html"), err => {
+    if (err && !res.headersSent) res.status(404).send("Admin file missing from deployment. Please check repository root.");
+  });
+});
+app.get(["/delivery", "/delivery/", "/delivery.html"], (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.sendFile(path.join(__dirname, "delivery.html"), err => {
+    if (err && !res.headersSent) res.status(404).send("Delivery Boy file missing from deployment.");
+  });
+});
+
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api/")) {
     return next();
