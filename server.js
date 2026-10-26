@@ -35,6 +35,26 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true, app: "MeenaMa Delivery API" });
 });
 
+const DELIVERY_DB = path.join(__dirname, "delivery-status.json");
+function readDeliveryStatus() {
+  try { return JSON.parse(fs.readFileSync(DELIVERY_DB, "utf8")); }
+  catch { return { deliveryBoys: [] }; }
+}
+function saveDeliveryStatus(data) {
+  fs.writeFileSync(DELIVERY_DB, JSON.stringify(data, null, 2));
+}
+app.get("/api/delivery-status", (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json(readDeliveryStatus());
+});
+app.put("/api/delivery-status", (req, res) => {
+  if (!req.body || !Array.isArray(req.body.deliveryBoys)) {
+    return res.status(400).json({ error: "deliveryBoys must be an array" });
+  }
+  saveDeliveryStatus(req.body);
+  res.json({ ok: true, count: req.body.deliveryBoys.length });
+});
+
 app.get("/api/orders", (req, res) => {
   res.json(readOrders());
 });
