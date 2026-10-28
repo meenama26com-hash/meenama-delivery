@@ -154,7 +154,54 @@ body{background:#f4f7f4}
  .mm-qc-products .name{font-size:12px}
 }
 </style>
-\n</head>
+\n
+<style id="mm-video-reference-redesign">
+/* MeenaMa quick-commerce redesign inspired by the supplied reference video */
+body{background:#fffaf0!important;color:#20251f}
+.app{background:#fffdf8!important;max-width:520px}
+.top{background:#fff2bf!important;border-bottom:1px solid #f4dc78!important;box-shadow:0 3px 12px #6c50100d!important}
+.brand-main{color:#176a38!important}
+.brand-main span{color:#b98a00!important}
+.tag{color:#625632!important}
+.search{background:#fff!important;border:1px solid #e9dca8!important;box-shadow:0 2px 7px #9d7a1710}
+.area-bar{background:#ffe06b!important;color:#222b20!important;box-shadow:0 2px 8px #9d7a1720!important}
+.area-bar small{color:#514725!important;opacity:1!important}
+.area-status{color:#225e34!important;font-weight:800}
+.mm-photo-cats{background:#fffdf8;padding-top:12px!important;padding-bottom:12px!important;gap:11px!important}
+.mm-photo-cats .mm-qc-cat{min-width:70px!important;flex:0 0 70px!important}
+.mm-photo-cats .mm-qc-icon{width:58px!important;height:58px!important;border-radius:17px!important;background:#fff4c9!important;border:1px solid #f0dda0!important;color:#24743c!important;box-shadow:0 2px 6px #8a6c1012!important}
+.mm-photo-cats .mm-qc-cat b{font-size:11px!important;line-height:1.2}
+.mm-photo-hero{background:linear-gradient(125deg,#fff0a8 0%,#ffe16b 65%,#ffd34b 100%)!important;color:#2e321e!important;border:1px solid #f3d65d;box-shadow:0 4px 12px #8c6e1318!important;min-height:166px!important;border-radius:16px!important;padding:20px 16px!important}
+.mm-photo-hero .welcome-title{color:#264a2d!important;font-size:25px!important;font-weight:900!important;max-width:64%!important}
+.mm-photo-hero .welcome-sub{color:#4e563c!important;font-size:13px!important}
+.mm-photo-hero .btn{background:#087b3a!important;color:#fff!important}
+.mm-hero-basket{filter:drop-shadow(0 4px 3px #785d1720)!important}
+.mm-video-offers{display:flex;gap:8px;overflow-x:auto;padding:0 13px 11px;scrollbar-width:none}
+.mm-video-offers::-webkit-scrollbar{display:none}
+.mm-video-offer{flex:0 0 210px;background:#fff8db;border:1px solid #f1df9e;border-radius:12px;padding:10px 11px;color:#333322;font-size:11px;line-height:1.35}
+.mm-video-offer b{display:block;font-size:12px;margin-bottom:3px;color:#225b31}
+.mm-best-title{padding:9px 14px 8px!important}
+.mm-best-title h3{font-size:19px!important;color:#252b22}
+.mm-best-title span{color:#16713a!important}
+.mm-qc-products .grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+.mm-qc-products .card{border:1px solid #eeeadc!important;border-radius:14px!important;background:#fff!important;padding:7px 7px 47px!important;box-shadow:0 2px 8px #4b38100d!important}
+.mm-qc-products .pic{height:92px!important;background:#fff!important;border-radius:10px!important}
+.mm-qc-products .name{font-size:12px!important;min-height:29px}
+.mm-qc-products .price{font-size:15px!important;color:#202820}
+.mm-qc-products .add{background:#fff!important;color:#16723a!important;border:1px solid #4da86b!important;border-radius:8px!important;font-weight:800}
+.mm-quick-row{gap:7px!important}
+.mm-quick{background:#fff8dc!important;border-color:#f0e2af!important;border-radius:12px!important}
+.section h3{color:#273b2b}
+.category-sidebar{background:#fff7d9!important;border:1px solid #f0e1ac}
+.category-sidebar .cat.active{background:#fff!important;border-color:#168343!important;color:#08783a!important}
+.category-products .card{border-radius:14px!important;border-color:#ece8da!important;box-shadow:0 2px 8px #4030100c!important}
+.nav{background:#fffdf8!important;border-top:1px solid #eee5c9!important;box-shadow:0 -3px 12px #6d57100b}
+.nav button{color:#6d6c60!important}
+.nav button.active{color:#08783a!important}
+@media(max-width:370px){.mm-photo-cats .mm-qc-cat{min-width:62px!important;flex-basis:62px!important}.mm-photo-cats .mm-qc-icon{width:53px!important;height:53px!important}.mm-qc-products .pic{height:78px!important}.mm-photo-hero .welcome-title{font-size:22px!important}}
+</style>
+
+</head>
 <body><div class="app">
 <header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div><div class="voice-hint">🎙️ Mic dabakar product ka naam boliye</div><div style="text-align:center;font-size:11px;color:#667;margin:4px 0">MeenaMa Delivery • Full App</div></header>
 <div class="area-bar"><div><span id="areaTitle">📍 Delivery Area</span><small id="areaSub">PIN 712222 service available</small></div><div class="area-status"><span id="liveDistance">📍 Location set karein</span><br><span id="liveEta">🛵 ETA —</span></div></div><main>
@@ -169,11 +216,12 @@ body{background:#f4f7f4}
   </div>
   <div id="mmCategoryPanel" class="mm-category-panel"></div>
   <div class="mm-welcome mm-photo-hero">
-    <div class="welcome-title">Fresh Grocery<br>Daily Needs</div>
-    <div class="welcome-sub">Delivered to Your Door</div>
+    <div class="welcome-title">WELCOME TO<br>MEENAMA</div>
+    <div class="welcome-sub">Har Ghar Ki Zarurat, Ab Ghar Tak!</div>
     <button class="btn" style="margin-top:12px;background:#08a94e;color:#fff;border-radius:24px;padding:11px 22px" onclick="show('categories')">Order Now →</button>
     <div class="mm-hero-basket" aria-hidden="true">🧺🥬🍅🥕</div>
   </div>
+  <div class="mm-video-offers"><div class="mm-video-offer"><b>🎉 Welcome Offer</b>First order par special savings</div><div class="mm-video-offer"><b>🛵 Fast Local Delivery</b>Champdani aur aas-paas ke liye</div><div class="mm-video-offer"><b>🛒 Daily Needs</b>Grocery, dairy aur ghar ka samaan</div></div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
   <div class="mm-qc-products"><div id="homeProducts" class="grid"></div></div>
   <div class="mm-quick-row">
@@ -629,7 +677,24 @@ function closeProduct(){document.getElementById('productModal').classList.remove
 function getSavedOrders(){
  return JSON.parse(localStorage.getItem('mmorders')||'[]');
 }
-function saveOrders(a){localStorage.setItem('mmorders',JSON.stringify(a));}
+function saveOrders(a){
+ localStorage.setItem('mmorders',JSON.stringify(a));
+ // Sync order changes to the shared server. Offline use remains available.
+ fetch('https://meenama-delivery-app-9681.onrender.com/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});
+}
+async function syncMeenaMaOrders(){
+ try {
+  const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/orders'); if(!r.ok)return;
+  const remote=await r.json(); if(!Array.isArray(remote))return;
+  const local=getSavedOrders(), map=new Map(remote.map(o=>[String(o.id),o]));
+  for(const o of local){const old=map.get(String(o.id));map.set(String(o.id),old?{...o,...old}:o);}
+  const merged=Array.from(map.values()); localStorage.setItem('mmorders',JSON.stringify(merged));
+  const current=JSON.parse(localStorage.getItem('mmorder')||'null');
+  if(current){const latest=merged.find(o=>String(o.id)===String(current.id));if(latest){localStorage.setItem('mmorder',JSON.stringify(latest));if(typeof renderCustomerOrder==='function')renderCustomerOrder(latest);}}
+  if(document.getElementById('adminOrders')&&document.getElementById('adminPanel')?.style.display==='block')renderAdminOrders();
+ } catch(e) {}
+}
+document.addEventListener('DOMContentLoaded',()=>{syncMeenaMaOrders();setInterval(syncMeenaMaOrders,8000)});
 function renderAdminOrders(){
  const el=document.getElementById('adminOrders');
  const orders=getSavedOrders();
@@ -669,7 +734,7 @@ if(savedOrder){
  document.getElementById('deliveryStatus').style.display='block';
 }
 
-function renderInvoice(o,msg){if(!o)return;let rows=(o.items||[]).map(i=>`<tr><td>${i.name}<br><small>${i.size||''}${i.colour?' • '+i.colour:''}</small></td><td>${i.qty}</td><td>₹${i.price}</td><td>₹${i.price*i.qty}</td></tr>`).join('');document.getElementById('invoiceBox').innerHTML=`<div class="invoice" id="printInvoice"><h3>🛵 MeenaMa Delivery</h3><div><b>Order ID:</b> ${o.id} &nbsp; <b>Date:</b> ${o.date}</div><hr><b>Customer:</b> ${o.name}<br><b>Mobile:</b> ${o.phone}<br><b>Address:</b> ${o.address}<br><br><table><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>${rows}</table><p>Subtotal: ₹${o.subtotal}</p><p>Delivery Charge: ₹${o.delivery}</p><p class="grand">Total: ₹${o.total}</p><p>Payment Mode: <b>${o.paymentMode}</b></p><p>Order Status: <span class="badge2">${o.status}</span></p><p style="text-align:center">Thank you for ordering from MeenaMa Delivery! ❤️</p></div><div class="invoice-actions"><button class="btn checkout" onclick="window.print()">🖨️ Print / Save PDF</button><a class="wa" href="https://wa.me/?text=${encodeURIComponent('MeenaMa Delivery Bill\nOrder ID: '+o.id+'\nTotal: ₹'+o.total+'\nCustomer: '+o.name+'\nStatus: '+o.status)}" target="_blank">💬 Share Bill on WhatsApp</a></div>`}
+function renderInvoice(o,msg){if(!o)return;let rows=(o.items||[]).map(i=>`<tr><td>${i.name}<br><small>${i.size||''}${i.colour?' • '+i.colour:''}</small></td><td>${i.qty}</td><td>₹${i.price}</td><td>₹${i.price*i.qty}</td></tr>`).join('');document.getElementById('invoiceBox').innerHTML=`<div class="invoice" id="printInvoice"><h3>🛵 MeenaMa Delivery</h3><div><b>Order ID:</b> ${o.id} &nbsp; <b>Date:</b> ${o.date}</div><hr><b>Customer:</b> ${o.name}<br><b>Mobile:</b> ${o.phone}<br><b>Address:</b> ${o.address}<br><br><table><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>${rows}</table><p>Subtotal: ₹${o.subtotal}</p><p>Delivery Charge: ₹${o.delivery}</p><p class="grand">Total: ₹${o.total}</p><p>Payment Mode: <b>${o.paymentMode}</b></p><p>Order Status: <span class="badge2">${o.status}</span></p><p style="text-align:center">Thank you for ordering from MeenaMa Delivery! ❤️</p></div><div class="invoice-actions"><a class="wa" href="https://wa.me/?text=${encodeURIComponent('MeenaMa Delivery Bill\nOrder ID: '+o.id+'\nTotal: ₹'+o.total+'\nCustomer: '+o.name+'\nStatus: '+o.status)}" target="_blank">💬 Share Bill on WhatsApp</a></div>`}
 function saveFeedback(){let r=document.getElementById('feedbackRating').value,t=document.getElementById('feedbackText').value.trim();if(!t)return alert('Feedback likhiye.');let a=JSON.parse(localStorage.getItem('mmfeedbacks')||'[]');a.push({order:document.getElementById('feedbackOrder').value.trim(),product:document.getElementById('feedbackProduct').value.trim(),rating:Number(r),text:t,date:new Date().toLocaleString('en-IN')});localStorage.setItem('mmfeedbacks',JSON.stringify(a));renderAdminFeedback();document.getElementById('feedbackText').value='';document.getElementById('feedbackSaved').innerHTML='<div class="total">✅ Feedback saved. Thank you!</div>'}
 function voiceSearch(){
  const R=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -695,69 +760,5 @@ document.addEventListener('DOMContentLoaded',()=>{loadCustomerProfile();setInter
 let mmDeferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();mmDeferredPrompt=e;const b=document.getElementById('installBtn');if(b)b.style.display='block';});
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='installBtn'&&mmDeferredPrompt){mmDeferredPrompt.prompt();mmDeferredPrompt.userChoice.finally(()=>{mmDeferredPrompt=null;e.target.style.display='none';});}});
-</script><div id="pinGate" class="pin-gate"><div class="pin-card"><h2>📍 MeenaMa Delivery</h2><p style="color:#68736b;margin-top:4px">Service area check</p><p>Apna <b>PIN code</b> dijiye. Abhi service area <b>712222</b> hai.</p><input id="gatePin" class="field" inputmode="numeric" maxlength="6" placeholder="Enter PIN code"><div id="gateMsg" style="font-size:13px;margin:5px 0"></div><button class="btn checkout" onclick="unlockServiceArea()">Continue</button><small style="display:block;margin-top:10px;color:#777">Baad me Admin Settings se aur PIN codes add kiye ja sakte hain.</small></div></div><script>function unlockServiceArea(){const pin=(document.getElementById('gatePin').value||'').trim();if(isAllowedPin(pin)){localStorage.setItem('mmactivePin',pin);document.getElementById('pinGate').style.display='none';document.getElementById('gateMsg').textContent='';}else{document.getElementById('gateMsg').textContent='❌ Is PIN me abhi service available nahi hai.';document.getElementById('gateMsg').className='pin-bad';}}function initPinGate(){const pin=localStorage.getItem('mmactivePin')||'';if(pin&&isAllowedPin(pin)){document.getElementById('pinGate').style.display='none';}else{document.getElementById('pinGate').style.display='flex';}}document.addEventListener('DOMContentLoaded',()=>setTimeout(initPinGate,50));</script><script>
-(function () {
-  const API = "/api/orders";
-  const KEY = "mmorders";
-  let syncing = false;
-
-  async function syncOrders() {
-    if (syncing) return;
-    syncing = true;
-
-    try {
-      const response = await fetch(API);
-      if (!response.ok) throw new Error("Server error");
-
-      const remote = await response.json();
-      const local = JSON.parse(localStorage.getItem(KEY) || "[]");
-      const merged = new Map();
-
-      remote.forEach(order => merged.set(String(order.id), order));
-      local.forEach(order => merged.set(String(order.id), {
-        ...(merged.get(String(order.id)) || {}),
-        ...order
-      }));
-
-      const orders = Array.from(merged.values());
-      localStorage.setItem(KEY, JSON.stringify(orders));
-
-      await fetch(API, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orders })
-      });
-
-      console.log("MeenaMa orders synced");
-    } catch (error) {
-      console.log("Sync pending:", error.message);
-    } finally {
-      syncing = false;
-    }
-  }
-
-  const oldSaveOrders = window.saveOrders;
-
-  window.saveOrders = function (orders) {
-    localStorage.setItem(KEY, JSON.stringify(orders));
-
-    fetch(API, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orders })
-    }).catch(error => console.log(error));
-
-    if (typeof oldSaveOrders === "function") {
-      try {
-        oldSaveOrders(orders);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  syncOrders();
-  setInterval(syncOrders, 15000);
-})();
-</script>
+</script><div id="pinGate" class="pin-gate"><div class="pin-card"><h2>📍 MeenaMa Delivery</h2><p style="color:#68736b;margin-top:4px">Service area check</p><p>Apna <b>PIN code</b> dijiye. Abhi service area <b>712222</b> hai.</p><input id="gatePin" class="field" inputmode="numeric" maxlength="6" placeholder="Enter PIN code"><div id="gateMsg" style="font-size:13px;margin:5px 0"></div><button class="btn checkout" onclick="unlockServiceArea()">Continue</button><small style="display:block;margin-top:10px;color:#777">Baad me Admin Settings se aur PIN codes add kiye ja sakte hain.</small></div></div><script>function unlockServiceArea(){const pin=(document.getElementById('gatePin').value||'').trim();if(isAllowedPin(pin)){localStorage.setItem('mmactivePin',pin);document.getElementById('pinGate').style.display='none';document.getElementById('gateMsg').textContent='';}else{document.getElementById('gateMsg').textContent='❌ Is PIN me abhi service available nahi hai.';document.getElementById('gateMsg').className='pin-bad';}}function initPinGate(){const pin=localStorage.getItem('mmactivePin')||'';if(pin&&isAllowedPin(pin)){document.getElementById('pinGate').style.display='none';}else{document.getElementById('pinGate').style.display='flex';}}document.addEventListener('DOMContentLoaded',()=>setTimeout(initPinGate,50));</script>
 </body></html>
