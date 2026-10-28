@@ -201,6 +201,13 @@ body{background:#f4f8f5!important;color:#202820}
 @media(max-width:370px){.mm-photo-cats .mm-qc-cat{min-width:62px!important;flex-basis:62px!important}.mm-photo-cats .mm-qc-icon{width:53px!important;height:53px!important}.mm-qc-products .pic{height:78px!important}.mm-photo-hero .welcome-title{font-size:22px!important}}
 </style>
 
+
+<style id="mm-small-search">
+/* Compact search bar only; keep the existing app layout and colors. */
+.top .search{margin-top:7px!important;padding:5px 11px!important;min-height:36px!important;height:36px!important;border-radius:22px!important}
+.top .search input{font-size:14px!important}
+.top .search-suggest{top:42px!important}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div><div class="voice-hint">🎙️ Mic dabakar product ka naam boliye</div><div style="text-align:center;font-size:11px;color:#667;margin:4px 0">MeenaMa Delivery • Full App</div></header>
