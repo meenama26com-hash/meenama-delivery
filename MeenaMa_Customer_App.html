@@ -41,7 +41,7 @@
 .install-btn{display:none;margin:9px 0 0;width:100%;background:#0b8a43;color:#fff;border:0;border-radius:11px;padding:10px;font-weight:800}
 .admin-only,#adminPanel,#invoiceBox,#feedbackBox,.reviewbox,#settingsAdmin{display:none;}
 <style>
-.area-bar{background:#0b8a43;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;box-shadow:0 2px 7px rgba(0,0,0,.08)}.area-bar small{display:block;font-weight:500;opacity:.9;margin-top:2px}.area-status{font-size:12px;text-align:right}.pin-gate{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}.pin-card{width:min(430px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.28)}.pin-card h2{margin:0 0 7px}.customer-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f4faf5;border:1px solid #dcebdd;border-radius:14px;padding:10px 12px;margin:10px 0}.home-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.home-tool{background:#fff;border:1px solid #e4ebe5;border-radius:14px;padding:12px;text-align:left;cursor:pointer;box-shadow:0 3px 10px rgba(20,70,35,.04)}.home-tool b{display:block;margin-top:4px}.mini-rating{font-size:13px;color:#f0ad00}.notify-dot{display:inline-flex;min-width:20px;height:20px;padding:0 5px;border-radius:20px;background:#e53935;color:#fff;align-items:center;justify-content:center;font-size:10px;margin-left:4px}.location-btn{background:#fff;color:#0b8a43;border:1px solid #cfe3d3;padding:7px 10px;border-radius:10px;font-weight:700}.notice{background:#fff7e6;border:1px solid #f0d89b;border-radius:14px;padding:11px;margin:10px 0}.admin-alert{display:none;background:#ffe9e9;border:1px solid #f3aaaa;border-radius:14px;padding:12px;margin:10px 0}.admin-alert.show{display:block}
+.customer-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f4faf5;border:1px solid #dcebdd;border-radius:14px;padding:10px 12px;margin:10px 0}.home-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.home-tool{background:#fff;border:1px solid #e4ebe5;border-radius:14px;padding:12px;text-align:left;cursor:pointer;box-shadow:0 3px 10px rgba(20,70,35,.04)}.home-tool b{display:block;margin-top:4px}.mini-rating{font-size:13px;color:#f0ad00}.notify-dot{display:inline-flex;min-width:20px;height:20px;padding:0 5px;border-radius:20px;background:#e53935;color:#fff;align-items:center;justify-content:center;font-size:10px;margin-left:4px}.location-btn{background:#fff;color:#0b8a43;border:1px solid #cfe3d3;padding:7px 10px;border-radius:10px;font-weight:700}.notice{background:#fff7e6;border:1px solid #f0d89b;border-radius:14px;padding:11px;margin:10px 0}.admin-alert{display:none;background:#ffe9e9;border:1px solid #f3aaaa;border-radius:14px;padding:12px;margin:10px 0}.admin-alert.show{display:block}
 .return-policy{background:#f8fbf8;border:1px solid #d9e9dc;border-radius:15px;padding:13px;margin:12px 0;color:#24352a;font-size:12px;line-height:1.55}
 .return-policy h4{margin:0 0 7px;color:#08783a;font-size:15px}
 .return-policy ul{margin:7px 0 7px 18px;padding:0}
@@ -164,9 +164,7 @@ body{background:#f4f8f5!important;color:#202820}
 .brand-main span{color:#f0b900!important}
 .tag{color:#607066!important}
 .search{background:#f7faf8!important;border:1px solid #e0e9e2!important;box-shadow:0 2px 7px #173d240a}
-.area-bar{background:#0b8a43!important;color:#fff!important;box-shadow:0 2px 8px #0b8a4320!important}
-.area-bar small{color:#fff!important;opacity:.9!important}
-.area-status{color:#fff!important;font-weight:800}
+
 .mm-photo-cats{background:#fff;padding-top:12px!important;padding-bottom:12px!important;gap:11px!important}
 .mm-photo-cats .mm-qc-cat{min-width:70px!important;flex:0 0 70px!important}
 .mm-photo-cats .mm-qc-icon{width:58px!important;height:58px!important;border-radius:17px!important;background:#eaf7ee!important;border:1px solid #cfe8d6!important;color:#08783a!important;box-shadow:0 2px 6px #08783a12!important}
@@ -211,7 +209,7 @@ body{background:#f4f8f5!important;color:#202820}
 </head>
 <body><div class="app">
 <header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div><div class="voice-hint">🎙️ Mic dabakar product ka naam boliye</div><div style="text-align:center;font-size:11px;color:#667;margin:4px 0">MeenaMa Delivery • Full App</div></header>
-<div class="area-bar"><div><span id="areaTitle">📍 Delivery Area</span><small id="areaSub">Local delivery service</small></div><div class="area-status"><span id="liveDistance">📍 Location set karein</span><br><span id="liveEta">🛵 ETA —</span></div></div><main>
+<main>
 <section id="home" class="screen active">
 <div class="mm-qc">
   <div class="mm-qc-cats mm-photo-cats">
