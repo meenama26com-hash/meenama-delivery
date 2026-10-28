@@ -110,10 +110,10 @@ app.get(["/admin", "/admin/", "/MeenaMa_Owner_Admin.html"], (req, res) => {
     if (err && !res.headersSent) res.status(404).send("Admin file missing from deployment. Please check repository root.");
   });
 });
-app.get(["/delivery", "/delivery/", "/delivery.html"], (req, res) => {
+app.get(["/delivery", "/delivery/", "/delivery.html", "/MeenaMa_Delivery_Boy_App.html"], (req, res) => {
   res.setHeader("Cache-Control", "no-store");
-  res.sendFile(path.join(__dirname, "delivery.html"), err => {
-    if (err && !res.headersSent) res.status(404).send("Delivery Boy file missing from deployment.");
+  res.sendFile(path.join(__dirname, "MeenaMa_Delivery_Boy_App.html"), err => {
+    if (err && !res.headersSent) res.status(404).send("Green Delivery Boy file missing from deployment.");
   });
 });
 
