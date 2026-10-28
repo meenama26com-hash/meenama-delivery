@@ -31,6 +31,17 @@ function saveOrders(orders) {
   fs.writeFileSync(DB, JSON.stringify(orders, null, 2));
 }
 
+app.post("/api/delivery-login", (req, res) => {
+  const mobile = String(req.body?.mobile || "").trim();
+  const pin = String(req.body?.pin || "").trim();
+  const configuredPin = process.env.DELIVERY_BOY_PIN;
+  if (!configuredPin) return res.status(503).json({ ok: false, error: "Delivery Boy login is not configured on the server." });
+  if (!/^\+?[0-9]{10,15}$/.test(mobile)) return res.status(400).json({ ok: false, error: "Enter a valid registered mobile number." });
+  if (!pin || pin !== configuredPin) return res.status(401).json({ ok: false, error: "PIN galat hai." });
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, mobile });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, app: "MeenaMa Delivery API" });
 });
