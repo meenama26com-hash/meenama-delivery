@@ -154,7 +154,13 @@ body{background:#f4f7f4}
  .mm-qc-products .name{font-size:12px}
 }
 </style>
-\n</head>
+\n
+<style id="mm-compact-welcome-fix">
+/* Night-request: tiny Welcome only; remove banner/patti, preserve original home and offer/deals sections. */
+.mm-qc .mm-compact-welcome{display:block!important;margin:2px 14px 4px!important;padding:0!important;min-height:0!important;height:auto!important;background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#29332b!important;font-size:12px!important;font-weight:500!important;line-height:1.2!important;letter-spacing:0!important;}
+.mm-qc .mm-compact-welcome:before,.mm-qc .mm-compact-welcome:after{display:none!important;content:none!important;}
+</style>
+</head>
 <body><div class="app">
 <header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div><div class="voice-hint">🎙️ Mic dabakar product ka naam boliye</div><div style="text-align:center;font-size:11px;color:#667;margin:4px 0">MeenaMa Delivery • Full App</div></header>
 <div class="area-bar"><div><span id="areaTitle">📍 Delivery Area</span><small id="areaSub">PIN 712222 service available</small></div><div class="area-status"><span id="liveDistance">📍 Location set karein</span><br><span id="liveEta">🛵 ETA —</span></div></div><main>
@@ -168,7 +174,7 @@ body{background:#f4f7f4}
     <button class="mm-qc-cat" onclick="setCategory('Dairy')"><div class="mm-qc-icon">🥛</div><b>Dairy</b></button>
   </div>
   <div id="mmCategoryPanel" class="mm-category-panel"></div>
-  <div style="font-size:12px;font-weight:500;color:#29332b;margin:2px 14px 4px;line-height:1.2">Welcome</div>
+  <div class="mm-compact-welcome">Welcome</div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
   <div class="mm-qc-products"><div id="homeProducts" class="grid"></div></div>
   <div class="mm-quick-row">
