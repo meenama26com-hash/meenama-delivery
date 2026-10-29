@@ -94,6 +94,7 @@
 .total{border:1px solid #e3eee5!important;border-radius:13px!important;background:#f6fbf7!important}
 .checkout{border-radius:12px!important;min-height:45px!important;font-size:14px!important}
 @media(max-width:360px){.brand-main{font-size:17px!important}#homeCats .cat{flex-basis:65px;min-width:65px}.category-sidebar{width:82px!important;flex-basis:82px!important}}
+.mm-offers-section{padding:0 0 4px}.mm-offers{padding:0 12px 10px!important;gap:9px!important}.mm-offer{min-width:210px;max-width:260px;white-space:normal;background:#f3fbf4!important;border:1px solid #cfe8d3!important;border-radius:13px!important;padding:11px 12px!important;color:#203b29}.mm-offer .mm-offer-badge{display:inline-block;background:#08783a;color:#fff;border-radius:7px;padding:3px 7px;font-size:10px;font-weight:800;margin-bottom:5px}.mm-offer b{display:block;font-size:13px;margin-bottom:3px}.mm-offer span{font-size:11px;line-height:1.4;color:#53665a}
 </style>
 <style>
 /* MeenaMa Delivery - modern quick-commerce home */
@@ -249,6 +250,7 @@ body{background:#f4f8f5!important;color:#202820}
 <div class="mm-qc">
   <div class="mm-compact-welcome">Welcome</div>
   <div class="section" style="padding:4px 0 0"><h3 style="padding:0 14px 8px">Shop by Category</h3><div id="homeCats" class="cats"></div><div id="mmCategoryPanel" class="mm-category-panel"></div></div>
+  <div class="mm-offers-section"><div class="mm-best-title"><h3>Offers for You</h3><span>LIVE OFFERS</span></div><div id="mmOffers" class="mm-offers"><div class="mm-offer"><b>Offers loading…</b><br><span>Latest deals aa rahe hain.</span></div></div></div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
   <div class="mm-qc-products"><div id="homeProducts" class="grid"></div></div>
   <div class="mm-quick-row"><button class="mm-quick" onclick="show('orders')"><span>📦</span>My Orders</button><button class="mm-quick" onclick="requestCustomerLocation()"><span>📍</span>Live Location</button><button class="mm-quick" onclick="show('cart')"><span>🛒</span>My Cart</button></div>
@@ -780,4 +782,16 @@ document.addEventListener('DOMContentLoaded',()=>{loadCustomerProfile();setInter
 let mmDeferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();mmDeferredPrompt=e;const b=document.getElementById('installBtn');if(b)b.style.display='block';});
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='installBtn'&&mmDeferredPrompt){mmDeferredPrompt.prompt();mmDeferredPrompt.userChoice.finally(()=>{mmDeferredPrompt=null;e.target.style.display='none';});}});
+</script><script>
+(function(){
+ const api='https://meenama-delivery-app-9681.onrender.com/api/offers';
+ const escOffer=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ async function loadOffers(){
+  const box=document.getElementById('mmOffers');if(!box)return;
+  try{const r=await fetch(api,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const all=await r.json();if(!Array.isArray(all))throw Error('Invalid offers');localStorage.setItem('mmoffers',JSON.stringify(all));draw(all);}
+  catch(e){try{draw(JSON.parse(localStorage.getItem('mmoffers')||'[]'));}catch(_){draw([]);}}
+  function draw(all){const active=all.filter(o=>o.active!==false);box.innerHTML=active.length?active.map(o=>'<article class="mm-offer"><span class="mm-offer-badge">'+escOffer(o.badge||'OFFER')+'</span><b>'+escOffer(o.title)+'</b><span>'+escOffer(o.description||'MeenaMa Delivery par offer dekhein.')+'</span></article>').join(''):'<article class="mm-offer"><b>Abhi koi active offer nahi</b><span>Naye offers jaldi aayenge.</span></article>';}
+ }
+ document.addEventListener('DOMContentLoaded',()=>{loadOffers();setInterval(loadOffers,30000)});
+})();
 </script></body></html>
