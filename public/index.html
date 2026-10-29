@@ -175,24 +175,12 @@ body{background:#f4f7f4}
 <div class="area-bar"><div><span id="areaTitle">📍 Delivery Area</span><small id="areaSub">PIN 712222 service available</small></div><div class="area-status"><span id="liveDistance">📍 Location set karein</span><br><span id="liveEta">🛵 ETA —</span></div></div><main>
 <section id="home" class="screen active">
 <div class="mm-qc">
-  <div class="mm-qc-cats mm-photo-cats">
-    <button class="mm-qc-cat" onclick="setCategory('Grocery')"><div class="mm-qc-icon">🧺</div><b>Grocery</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Snacks')"><div class="mm-qc-icon">🍔</div><b>Food & Snacks</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Personal Care')"><div class="mm-qc-icon">🧴</div><b>Daily Needs</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Vegetables')"><div class="mm-qc-icon">🥦</div><b>Vegetables</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Dairy')"><div class="mm-qc-icon">🥛</div><b>Dairy</b></button>
-  </div>
-  <div id="mmCategoryPanel" class="mm-category-panel"></div>
   <div class="mm-compact-welcome">Welcome</div>
+  <div class="section" style="padding:4px 0 0"><h3 style="padding:0 14px 8px">Shop by Category</h3><div id="homeCats" class="cats"></div></div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
   <div class="mm-qc-products"><div id="homeProducts" class="grid"></div></div>
-  <div class="mm-quick-row">
-    <button class="mm-quick" onclick="show('orders')"><span>📦</span>My Orders</button>
-    <button class="mm-quick" onclick="requestCustomerLocation()"><span>📍</span>Live Location</button>
-    <button class="mm-quick" onclick="show('cart')"><span>🛒</span>My Cart</button>
-  </div>
+  <div class="mm-quick-row"><button class="mm-quick" onclick="show('orders')"><span>📦</span>My Orders</button><button class="mm-quick" onclick="requestCustomerLocation()"><span>📍</span>Live Location</button><button class="mm-quick" onclick="show('cart')"><span>🛒</span>My Cart</button></div>
   <div class="section"><div class="customer-chip"><div>👤 <b id="homeCustomerName">Customer</b><br><small>ID: <span id="homeCustomerId">MM-CUSTOMER</span></small></div><button class="location-btn" onclick="requestCustomerLocation()">📍 Location</button></div></div>
-  <div class="section"><h3>Shop by Category</h3><div id="homeCats" class="cats"></div></div>
   <div class="section"><div class="notice">🚚 <b>Delivery Time</b><br><small>Customer ki live location ke hisaab se distance aur estimated time dikhaya jayega.</small></div></div>
 </div>
 </section>
