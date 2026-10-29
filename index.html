@@ -224,7 +224,7 @@ body{background:#f4f8f5!important;color:#202820}
 </style>
 </head>
 <body><div class="app">
-<header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div></header>
+<header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div><button type="button" onclick="show('account')" aria-label="Profile" title="Profile" style="margin-left:auto;flex:0 0 38px;width:38px;height:38px;border:1px solid #e2e9e3;border-radius:50%;background:#f4faf5;color:#08783a;font-size:20px;display:flex;align-items:center;justify-content:center">👤</button></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div></header>
 <main>
 <section id="home" class="screen active">
 <div class="mm-qc">
@@ -315,7 +315,7 @@ body{background:#f4f8f5!important;color:#202820}
 <button class="btn" style="margin-top:12px;width:100%;background:#eee" onclick="adminLogout()">Logout</button>
 </div></div></section>
 </main>
-<nav class="nav"><button onclick="show('home')">🏠<br>Home</button><button onclick="show('categories')">▦<br>Categories</button><button onclick="show('cart')">🛒<br>Cart <span id="badge"></span></button><button onclick="show('orders')">📦<br>Orders</button><button onclick="show('account')">👤<br>Account</button></nav>
+<nav class="nav"><button onclick="show('home')">🏠<br>Home</button><button onclick="show('categories')">▦<br>Categories</button><button onclick="show('cart')">🛒<br>Cart <span id="badge"></span></button><button onclick="show('orders')">📦<br>Orders</button></nav>
 </div>
 <script>
 let products=[
