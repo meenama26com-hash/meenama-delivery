@@ -41,7 +41,7 @@
 .install-btn{display:none;margin:9px 0 0;width:100%;background:#0b8a43;color:#fff;border:0;border-radius:11px;padding:10px;font-weight:800}
 .admin-only,#adminPanel,#invoiceBox,#feedbackBox,.reviewbox,#settingsAdmin{display:none;}
 <style>
-.area-bar{background:#0b8a43;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;box-shadow:0 2px 7px rgba(0,0,0,.08)}.area-bar small{display:block;font-weight:500;opacity:.9;margin-top:2px}.area-status{font-size:12px;text-align:right}.pin-gate{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}.pin-card{width:min(430px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.28)}.pin-card h2{margin:0 0 7px}.customer-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f4faf5;border:1px solid #dcebdd;border-radius:14px;padding:10px 12px;margin:10px 0}.home-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.home-tool{background:#fff;border:1px solid #e4ebe5;border-radius:14px;padding:12px;text-align:left;cursor:pointer;box-shadow:0 3px 10px rgba(20,70,35,.04)}.home-tool b{display:block;margin-top:4px}.mini-rating{font-size:13px;color:#f0ad00}.notify-dot{display:inline-flex;min-width:20px;height:20px;padding:0 5px;border-radius:20px;background:#e53935;color:#fff;align-items:center;justify-content:center;font-size:10px;margin-left:4px}.location-btn{background:#fff;color:#0b8a43;border:1px solid #cfe3d3;padding:7px 10px;border-radius:10px;font-weight:700}.notice{background:#fff7e6;border:1px solid #f0d89b;border-radius:14px;padding:11px;margin:10px 0}.admin-alert{display:none;background:#ffe9e9;border:1px solid #f3aaaa;border-radius:14px;padding:12px;margin:10px 0}.admin-alert.show{display:block}
+.customer-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f4faf5;border:1px solid #dcebdd;border-radius:14px;padding:10px 12px;margin:10px 0}.home-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.home-tool{background:#fff;border:1px solid #e4ebe5;border-radius:14px;padding:12px;text-align:left;cursor:pointer;box-shadow:0 3px 10px rgba(20,70,35,.04)}.home-tool b{display:block;margin-top:4px}.mini-rating{font-size:13px;color:#f0ad00}.notify-dot{display:inline-flex;min-width:20px;height:20px;padding:0 5px;border-radius:20px;background:#e53935;color:#fff;align-items:center;justify-content:center;font-size:10px;margin-left:4px}.location-btn{background:#fff;color:#0b8a43;border:1px solid #cfe3d3;padding:7px 10px;border-radius:10px;font-weight:700}.notice{background:#fff7e6;border:1px solid #f0d89b;border-radius:14px;padding:11px;margin:10px 0}.admin-alert{display:none;background:#ffe9e9;border:1px solid #f3aaaa;border-radius:14px;padding:12px;margin:10px 0}.admin-alert.show{display:block}
 .return-policy{background:#f8fbf8;border:1px solid #d9e9dc;border-radius:15px;padding:13px;margin:12px 0;color:#24352a;font-size:12px;line-height:1.55}
 .return-policy h4{margin:0 0 7px;color:#08783a;font-size:15px}
 .return-policy ul{margin:7px 0 7px 18px;padding:0}
@@ -65,6 +65,16 @@
 
 /* Customer build: Admin controls are not part of the customer interface. */
 #admin{display:none!important}
+
+/* Compact quick-commerce refresh */
+.top{padding:10px 12px!important;box-shadow:0 2px 10px rgba(18,50,25,.035)}
+.mm-logo{width:34px!important;height:34px!important;border-radius:10px!important;margin-right:8px!important}.brand-main{font-size:19px!important;letter-spacing:-.3px!important}.tag{font-size:10px!important;margin-top:3px!important}
+.search{margin-top:10px!important;background:#f5f7f5!important;border:1px solid #e7ece8!important;border-radius:12px!important;padding:8px 10px!important;min-height:42px}.mm-compact-welcome{margin:7px 14px 4px!important;font-size:11px!important;color:#6b766e!important}
+.mm-best-title{padding:10px 14px 8px!important}.mm-best-title h3{font-size:16px!important;color:#1b2b20!important}.mm-best-title span{font-size:12px!important;color:#07843e!important;font-weight:700!important}
+#homeCats{display:flex;gap:8px;overflow-x:auto;padding:2px 12px 10px;scrollbar-width:none}#homeCats::-webkit-scrollbar{display:none}#homeCats .cat{flex:0 0 72px;min-width:72px;padding:8px 5px!important;border:1px solid #edf0ed!important;border-radius:12px!important;background:#fff!important;color:#344238!important}#homeCats .cat i{display:block;font-style:normal;font-size:25px;margin-bottom:5px}#homeCats .cat.active{background:#eef8f0!important;border-color:#b9e0c2!important;color:#08783a!important}
+.mm-qc-products{padding:0 12px 12px!important}.mm-qc-products .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px!important}.card{border:1px solid #edf0ed!important;border-radius:14px!important;padding:8px!important;box-shadow:0 2px 8px rgba(24,55,31,.045)!important}.pic{height:105px!important;border-radius:10px!important;font-size:43px!important}.name{font-size:13px!important;line-height:1.35!important}.meta{font-size:10px!important}.price{font-size:16px!important}.add{right:7px!important;bottom:8px!important;border-radius:8px!important;padding:6px 10px!important;font-size:11px!important}.details-btn{font-size:11px!important;padding:7px!important}
+.mm-quick-row{padding:4px 12px 10px!important;gap:7px!important}.mm-quick{border-radius:11px!important;padding:9px 5px!important;font-size:10px!important;background:#f8faf8!important;border-color:#edf0ed!important}.mm-quick span{display:block;font-size:19px;margin-bottom:3px}.customer-chip{margin:6px 12px!important;border-radius:12px!important;padding:9px 10px!important}.location-btn{font-size:11px!important;padding:7px 9px!important}.nav{box-shadow:0 -3px 12px rgba(0,0,0,.04)}
+.mm-offers-section{padding:0 0 4px}.mm-offers{padding:0 12px 10px!important;gap:9px!important}.mm-offer{min-width:210px;max-width:260px;white-space:normal;background:#f3fbf4!important;border:1px solid #cfe8d3!important;border-radius:13px!important;padding:11px 12px!important;color:#203b29}.mm-offer-photo{display:block;width:100%;height:112px;object-fit:cover;border-radius:9px;margin:0 0 8px}.mm-offer .mm-offer-badge{display:inline-block;background:#08783a;color:#fff;border-radius:7px;padding:3px 7px;font-size:10px;font-weight:800;margin-bottom:5px}.mm-offer b{display:block;font-size:13px;margin-bottom:3px}.mm-offer span{font-size:11px;line-height:1.4;color:#53665a}
 </style>
 <style>
 /* MeenaMa Delivery - modern quick-commerce home */
@@ -128,10 +138,10 @@ body{background:#f4f7f4}
 .mm-photo-cats .mm-qc-cat{min-width:75px;flex:1}
 .mm-photo-cats .mm-qc-icon{width:70px;height:70px;border-radius:50%;background:linear-gradient(145deg,#08783a,#24b957);border:4px solid #d6f0dd;color:white;font-size:34px;box-shadow:0 3px 7px #00000012}
 .mm-photo-cats .mm-qc-cat b{font-size:12px;color:#17221a}
-.mm-photo-hero{margin:0 13px 13px;min-height:195px;padding:22px 18px;border-radius:20px;background:linear-gradient(120deg,#006b32 0%,#078b3c 48%,#55c51c 100%);box-shadow:0 4px 12px #08783a20}
-.mm-photo-hero .welcome-title{font-size:27px;line-height:1.12;max-width:62%;position:relative;z-index:1}
-.mm-photo-hero .welcome-sub{font-size:15px;max-width:62%;position:relative;z-index:1}
-.mm-hero-basket{position:absolute;right:8px;bottom:22px;width:43%;font-size:32px;line-height:1.8;text-align:center;transform:rotate(-5deg);filter:drop-shadow(0 4px 3px #004b252c)}
+.mm-photo-hero{margin:4px 12px 6px!important;min-height:0!important;height:auto!important;padding:7px 11px!important;border-radius:9px!important;background:#08783a!important;box-shadow:none!important;border:0!important;color:#fff!important}
+.mm-photo-hero .welcome-title{font-size:14px!important;line-height:1.2!important;font-weight:500!important;letter-spacing:0!important;max-width:100%!important;color:#fff!important}
+.mm-photo-hero .welcome-sub{display:none!important}
+.mm-hero-basket{display:none!important}
 .mm-best-title{padding:9px 14px 8px}
 .mm-best-title h3{font-size:21px}
 .mm-best-title span{font-size:14px}
@@ -149,41 +159,81 @@ body{background:#f4f7f4}
  .brand-main{font-size:21px}
  .mm-photo-cats .mm-qc-icon{width:59px;height:59px;font-size:29px}
  .mm-photo-cats .mm-qc-cat{min-width:63px}
- .mm-photo-hero .welcome-title{font-size:23px}
+ .mm-photo-hero .welcome-title{font-size:14px!important;line-height:1.2!important;font-weight:500!important;letter-spacing:0!important;max-width:100%!important;color:#fff!important}
  .mm-qc-products .pic{height:82px}
  .mm-qc-products .name{font-size:12px}
 }
 </style>
-\n</head>
+\n
+<style id="mm-video-reference-redesign">
+/* Keep the supplied video layout and spacing; preserve MeenaMa's existing green/white branding. */
+body{background:#f4f8f5!important;color:#202820}
+.app{background:#fff!important;max-width:520px}
+.top{background:#fff!important;border-bottom:1px solid #e4ece6!important;box-shadow:0 3px 12px #173d2410!important}
+.brand-main{color:#08783a!important}
+.brand-main span{color:#f0b900!important}
+.tag{color:#607066!important}
+.search{background:#f7faf8!important;border:1px solid #e0e9e2!important;box-shadow:0 2px 7px #173d240a}
+
+.mm-photo-cats{background:#fff;padding-top:12px!important;padding-bottom:12px!important;gap:11px!important}
+.mm-photo-cats .mm-qc-cat{min-width:70px!important;flex:0 0 70px!important}
+.mm-photo-cats .mm-qc-icon{width:58px!important;height:58px!important;border-radius:17px!important;background:#eaf7ee!important;border:1px solid #cfe8d6!important;color:#08783a!important;box-shadow:0 2px 6px #08783a12!important}
+.mm-photo-cats .mm-qc-cat b{font-size:11px!important;line-height:1.2}
+.mm-photo-hero{margin:4px 12px 6px!important;min-height:0!important;height:auto!important;padding:7px 11px!important;border-radius:9px!important;background:#08783a!important;box-shadow:none!important;border:0!important;color:#fff!important}
+.mm-photo-hero .welcome-title{font-size:14px!important;line-height:1.2!important;font-weight:500!important;letter-spacing:0!important;max-width:100%!important;color:#fff!important}
+.mm-photo-hero .welcome-sub{display:none!important}
+.mm-photo-hero .btn{background:#ffd21c!important;color:#17301f!important}
+.mm-hero-basket{display:none!important}
+.mm-video-offers{display:flex;gap:8px;overflow-x:auto;padding:0 13px 11px;scrollbar-width:none}
+.mm-video-offers::-webkit-scrollbar{display:none}
+.mm-video-offer{flex:0 0 210px;background:#f2faf4;border:1px solid #d9ebdd;border-radius:12px;padding:10px 11px;color:#27362b;font-size:11px;line-height:1.35}
+.mm-video-offer b{display:block;font-size:12px;margin-bottom:3px;color:#08783a}
+.mm-best-title{padding:9px 14px 8px!important}
+.mm-best-title h3{font-size:19px!important;color:#252b22}
+.mm-best-title span{color:#16713a!important}
+.mm-qc-products .grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+.mm-qc-products .card{border:1px solid #e1ebe3!important;border-radius:14px!important;background:#fff!important;padding:7px 7px 47px!important;box-shadow:0 2px 8px #173d240c!important}
+.mm-qc-products .pic{height:92px!important;background:#f8fbf8!important;border-radius:10px!important}
+.mm-qc-products .name{font-size:12px!important;min-height:29px}
+.mm-qc-products .price{font-size:15px!important;color:#202820}
+.mm-qc-products .add{background:#0b8a43!important;color:#fff!important;border:1px solid #0b8a43!important;border-radius:8px!important;font-weight:800}
+.mm-quick-row{gap:7px!important}
+.mm-quick{background:#f2faf4!important;border-color:#d9ebdd!important;border-radius:12px!important}
+.section h3{color:#273b2b}
+.category-sidebar{background:#f2faf4!important;border:1px solid #d9ebdd}
+.category-sidebar .cat.active{background:#fff!important;border-color:#168343!important;color:#08783a!important}
+.category-products .card{border-radius:14px!important;border-color:#e1ebe3!important;box-shadow:0 2px 8px #173d240c!important}
+.nav{background:#fff!important;border-top:1px solid #e1e9e3!important;box-shadow:0 -3px 12px #173d240b}
+.nav button{color:#6d766f!important}
+.nav button.active{color:#08783a!important}
+@media(max-width:370px){.mm-photo-cats .mm-qc-cat{min-width:62px!important;flex-basis:62px!important}.mm-photo-cats .mm-qc-icon{width:53px!important;height:53px!important}.mm-qc-products .pic{height:78px!important}.mm-photo-hero .welcome-title{font-size:14px!important;line-height:1.2!important;font-weight:500!important;letter-spacing:0!important;max-width:100%!important;color:#fff!important}}
+</style>
+
+
+<style id="mm-small-search">
+/* Compact search bar: reduce height and width only; preserve all existing colors and layout. */
+.top .search{margin:7px auto 0!important;padding:5px 11px!important;min-height:36px!important;height:36px!important;width:96%!important;max-width:520px!important;border-radius:22px!important}
+.top .search input{font-size:14px!important}
+.top .search-suggest{top:42px!important;left:6%!important;right:6%!important}
+</style>
+
+<style id="mm-compact-welcome-fix">
+/* Night-request: tiny Welcome only; remove banner/patti, preserve original home and offer/deals sections. */
+.mm-qc .mm-compact-welcome{display:block!important;margin:2px 14px 4px!important;padding:0!important;min-height:0!important;height:auto!important;background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:#29332b!important;font-size:12px!important;font-weight:500!important;line-height:1.2!important;letter-spacing:0!important;}
+.mm-qc .mm-compact-welcome:before,.mm-qc .mm-compact-welcome:after{display:none!important;content:none!important;}
+</style>
+</head>
 <body><div class="app">
-<header class="top"><div class="brand-wrap"><div class="mm-logo" aria-label="MeenaMa logo"></div><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div><div class="voice-hint">🎙️ Mic dabakar product ka naam boliye</div><div style="text-align:center;font-size:11px;color:#667;margin:4px 0">MeenaMa Delivery • Full App</div></header>
-<div class="area-bar"><div><span id="areaTitle">📍 Delivery Area</span><small id="areaSub">PIN 712222 service available</small></div><div class="area-status"><span id="liveDistance">📍 Location set karein</span><br><span id="liveEta">🛵 ETA —</span></div></div><main>
+<header class="top"><div class="brand-wrap"><button type="button" onclick="show('account')" aria-label="Profile" title="Profile" style="width:42px;height:42px;flex:0 0 42px;border:1px solid #dce8de;border-radius:13px;background:#f4faf5;color:#08783a;font-size:22px;display:flex;align-items:center;justify-content:center;margin-right:9px">👤</button><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="filterProducts()"><button id="micButton" class="voice" onclick="voiceSearch()" title="Voice Search" aria-label="Voice Search"><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div></header>
+<main>
 <section id="home" class="screen active">
 <div class="mm-qc">
-  <div class="mm-qc-cats mm-photo-cats">
-    <button class="mm-qc-cat" onclick="setCategory('Grocery')"><div class="mm-qc-icon">🧺</div><b>Grocery</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Snacks')"><div class="mm-qc-icon">🍔</div><b>Food & Snacks</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Personal Care')"><div class="mm-qc-icon">🧴</div><b>Daily Needs</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Vegetables')"><div class="mm-qc-icon">🥦</div><b>Vegetables</b></button>
-    <button class="mm-qc-cat" onclick="setCategory('Dairy')"><div class="mm-qc-icon">🥛</div><b>Dairy</b></button>
-  </div>
-  <div id="mmCategoryPanel" class="mm-category-panel"></div>
-  <div class="mm-welcome mm-photo-hero">
-    <div class="welcome-title">Fresh Grocery<br>Daily Needs</div>
-    <div class="welcome-sub">Delivered to Your Door</div>
-    <button class="btn" style="margin-top:12px;background:#08a94e;color:#fff;border-radius:24px;padding:11px 22px" onclick="show('categories')">Order Now →</button>
-    <div class="mm-hero-basket" aria-hidden="true">🧺🥬🍅🥕</div>
-  </div>
+  <div class="mm-compact-welcome">Welcome</div>
+  <div class="section" style="padding:4px 0 0"><h3 style="padding:0 14px 8px">Shop by Category</h3><div id="homeCats" class="cats"></div><div id="mmCategoryPanel" class="mm-category-panel"></div></div>
+  <div class="mm-offers-section"><div class="mm-best-title"><h3>Offers for You</h3><span>LIVE OFFERS</span></div><div id="mmOffers" class="mm-offers"><div class="mm-offer"><b>Offers loading…</b><br><span>Latest deals aa rahe hain.</span></div></div></div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
   <div class="mm-qc-products"><div id="homeProducts" class="grid"></div></div>
-  <div class="mm-quick-row">
-    <button class="mm-quick" onclick="show('orders')"><span>📦</span>My Orders</button>
-    <button class="mm-quick" onclick="requestCustomerLocation()"><span>📍</span>Live Location</button>
-    <button class="mm-quick" onclick="show('cart')"><span>🛒</span>My Cart</button>
-  </div>
-  <div class="section"><div class="customer-chip"><div>👤 <b id="homeCustomerName">Customer</b><br><small>ID: <span id="homeCustomerId">MM-CUSTOMER</span></small></div><button class="location-btn" onclick="requestCustomerLocation()">📍 Location</button></div></div>
-  <div class="section"><h3>Shop by Category</h3><div id="homeCats" class="cats"></div></div>
-  <div class="section"><div class="notice">🚚 <b>Delivery Time</b><br><small>Customer ki live location ke hisaab se distance aur estimated time dikhaya jayega.</small></div></div>
+  
 </div>
 </section>
 <section id="categories" class="screen">
@@ -226,14 +276,14 @@ body{background:#f4f7f4}
 <div class="step"><div class="dot">3</div><div><b>Out for Delivery</b><br><small>Delivery partner aapke address ki taraf aa raha hai.</small></div></div>
 <div class="step"><div class="dot">4</div><div><b>Delivered</b><br><small>Order deliver hone ke baad yahan status dikhega.</small></div></div>
 </div>
-<a class="wa" href="https://wa.me/916289254386?text=MeenaMa%20Delivery%20Service%20mere%20order%20ka%20delivery%20status%20bataye" target="_blank">💬 Delivery Status WhatsApp par Poochhein</a>
+
 </div>
 </div></section>
-<section id="account" class="screen"><div class="section"><h2>👤 My Account</h2><div class="customer-chip"><div>🆔 <b>Customer ID</b><br><span id="accountCustomerId">MM-CUSTOMER</span></div><span class="mini-rating">⭐ Customer</span></div><p style="font-size:13px;color:#68736b">Order place karne ke liye apna naam, mobile, PIN aur address bharein.</p><input id="custName" class="field" placeholder="Aapka naam"><input id="custPhone" class="field" placeholder="Mobile number"><input id="custPin" class="field" inputmode="numeric" maxlength="6" placeholder="Delivery PIN code (712222)"><textarea id="custAddress" class="field" rows="4" placeholder="Delivery address"></textarea><button class="btn checkout" onclick="saveDetails()">Save Details</button><div id="feedbackBox" class="reviewbox"><h3>⭐ Feedback & Rating</h3><select id="feedbackRating" class="field"><option value="5">⭐⭐⭐⭐⭐ 5 Stars</option><option value="4">⭐⭐⭐⭐ 4 Stars</option><option value="3">⭐⭐⭐ 3 Stars</option><option value="2">⭐⭐ 2 Stars</option><option value="1">⭐ 1 Star</option></select><input id="feedbackOrder" class="field" placeholder="Order ID (optional)"><input id="feedbackProduct" class="field" placeholder="Product (optional)"><textarea id="feedbackText" class="field" rows="3" placeholder="Apna feedback likhiye"></textarea><button class="btn checkout" onclick="saveFeedback()">Submit Feedback</button><div id="feedbackSaved"></div></div><a class="wa" href="https://wa.me/916289254386?text=MeenaMa%20Delivery%20Service%20se%20order%20karna%20hai" target="_blank">💬 WhatsApp par Order Karein</a></div></section>
-<section id="checkout" class="screen"><div class="section"><h2>Place Order</h2><div id="checkoutPinMsg" class="notice">📍 Service area: PIN 712222</div><input id="coName" class="field" placeholder="Naam"><input id="coPhone" class="field" placeholder="Mobile number"><input id="coPin" class="field" inputmode="numeric" maxlength="6" placeholder="Delivery PIN code (712222)"><textarea id="coAddress" class="field" rows="4" placeholder="Full delivery address"></textarea><select id="payment" class="field" onchange="toggleUpiPay()"><option>Cash on Delivery</option><option>UPI / Online Payment</option></select><div id="upiCard" class="payment-card" style="display:none">💳 <b>UPI Payment</b><p id="upiText" style="margin:6px 0;font-size:13px">Owner UPI ID Admin Settings se set hoga.</p><button type="button" class="btn" onclick="openUpiPayment()">📲 UPI App Open Karein</button></div><div id="coTotal" class="total"></div><button class="btn checkout" onclick="placeOrder()">Place Order</button></div></section>
+<section id="account" class="screen"><div class="section"><h2>👤 My Account</h2><div class="customer-chip"><div>🆔 <b>Customer ID</b><br><span id="accountCustomerId">MM-CUSTOMER</span></div><span class="mini-rating">⭐ Customer</span></div><p style="font-size:13px;color:#68736b">Order place karne ke liye apna naam, mobile aur address bharein.</p><input id="custName" class="field" placeholder="Aapka naam"><input id="custPhone" class="field" placeholder="Mobile number"><textarea id="custAddress" class="field" rows="3" placeholder="Full delivery address (House no., road, area)"></textarea><input id="custLandmark" class="field" placeholder="Landmark (nearby shop, temple, school etc.)" required><button class="btn checkout" onclick="saveDetails()">Save Details</button><div id="feedbackBox" class="reviewbox"><h3>⭐ Feedback & Rating</h3><select id="feedbackRating" class="field"><option value="5">⭐⭐⭐⭐⭐ 5 Stars</option><option value="4">⭐⭐⭐⭐ 4 Stars</option><option value="3">⭐⭐⭐ 3 Stars</option><option value="2">⭐⭐ 2 Stars</option><option value="1">⭐ 1 Star</option></select><input id="feedbackOrder" class="field" placeholder="Order ID (optional)"><input id="feedbackProduct" class="field" placeholder="Product (optional)"><textarea id="feedbackText" class="field" rows="3" placeholder="Apna feedback likhiye"></textarea><button class="btn checkout" onclick="saveFeedback()">Submit Feedback</button><div id="feedbackSaved"></div></div></div></section>
+<section id="checkout" class="screen"><div class="section"><h2>Place Order</h2><input id="coName" class="field" placeholder="Naam"><input id="coPhone" class="field" placeholder="Mobile number"><textarea id="coAddress" class="field" rows="3" placeholder="Full delivery address (House no., road, area)"></textarea><input id="coLandmark" class="field" placeholder="Landmark (nearby shop, temple, school etc.)" required><select id="payment" class="field" onchange="toggleUpiPay()"><option>Cash on Delivery</option><option>UPI / Online Payment</option></select><div id="upiCard" class="payment-card" style="display:none">💳 <b>UPI Payment</b><p id="upiText" style="margin:6px 0;font-size:13px">Owner UPI ID Admin Settings se set hoga.</p><button type="button" class="btn" onclick="openUpiPayment()">📲 UPI App Open Karein</button></div><div id="coTotal" class="total"></div><button class="btn checkout" onclick="placeOrder()">Place Order</button></div></section>
 
 
-<section id="tracking" class="screen"><div class="section"><h2>📍 Track Order</h2><div class="track"><div class="step"><div class="dot">✓</div><div><b>Order Placed</b><br><small>Order received</small></div></div><div class="step"><div class="dot">✓</div><div><b>Preparing Order</b><br><small>Items being collected</small></div></div><div class="step"><div class="dot">✓</div><div><b>Out for Delivery</b><br><small>Delivery partner is on the way</small></div></div><div class="step"><div class="dot">✓</div><div><b>Delivered</b><br><small>Thank you for ordering!</small></div></div></div><a class="wa" href="https://wa.me/916289254386?text=MeenaMa%20order%20ka%20status%20bataye" target="_blank">💬 WhatsApp Help</a></div></section>
+<section id="tracking" class="screen"><div class="section"><h2>📍 Track Order</h2><div class="track"><div class="step"><div class="dot">✓</div><div><b>Order Placed</b><br><small>Order received</small></div></div><div class="step"><div class="dot">✓</div><div><b>Preparing Order</b><br><small>Items being collected</small></div></div><div class="step"><div class="dot">✓</div><div><b>Out for Delivery</b><br><small>Delivery partner is on the way</small></div></div><div class="step"><div class="dot">✓</div><div><b>Delivered</b><br><small>Thank you for ordering!</small></div></div></div></div></section>
 
 <div id="productModal" class="modal" onclick="if(event.target===this)closeProduct()">
 <div class="modal-card">
@@ -259,11 +309,11 @@ body{background:#f4f7f4}
 </div>
 <div id="productsAdmin"><h3>Product Management</h3><div id="adminProductEditor"></div><button class="btn checkout" onclick="addProduct()">➕ Add New Product</button><button class="btn checkout" onclick="adminSaveProducts()">💾 Save Products</button></div>
 <div id="ordersAdmin" style="display:none"><h3>Customer Orders</h3><div id="adminOrders"></div><div id="invoiceBox"></div></div>
-<div id="feedbackAdmin" style="display:none"><h3>Customer Feedback</h3><div id="adminFeedback"></div></div><div id="settingsAdmin" style="display:none"><h3>⚙️ Delivery Settings</h3><label><b>Allowed PIN Codes</b></label><input id="allowedPins" class="field" value="712222" placeholder="712222,712223"><small>Comma se alag PIN codes. Customer sirf in areas me order kar sakta hai.</small><label><b>Owner UPI ID</b></label><input id="ownerUpi" class="field" placeholder="yourname@upi"><label><b>Service Base PIN</b></label><input id="basePin" class="field" inputmode="numeric" maxlength="6" value="712222" placeholder="712222"><button class="btn checkout" onclick="saveDeliverySettings()">💾 Save Settings</button><div class="notice">📍 Live distance ke liye customer location permission deni hogi. Is version me base area reference se ETA estimate kiya jayega; exact road routing ke liye maps/backend integration baad me joda ja sakta hai.</div></div>
+<div id="feedbackAdmin" style="display:none"><h3>Customer Feedback</h3><div id="adminFeedback"></div></div><div id="settingsAdmin" style="display:none"><h3>⚙️ Delivery Settings</h3><label><b>Owner UPI ID</b></label><input id="ownerUpi" class="field" placeholder="yourname@upi"><button class="btn checkout" onclick="saveDeliverySettings()">💾 Save Settings</button><div class="notice">📍 Live distance ke liye customer location permission deni hogi. Is version me base area reference se ETA estimate kiya jayega; exact road routing ke liye maps/backend integration baad me joda ja sakta hai.</div></div>
 <button class="btn" style="margin-top:12px;width:100%;background:#eee" onclick="adminLogout()">Logout</button>
 </div></div></section>
 </main>
-<nav class="nav"><button onclick="show('home')">🏠<br>Home</button><button onclick="show('categories')">▦<br>Categories</button><button onclick="show('cart')">🛒<br>Cart <span id="badge"></span></button><button onclick="show('orders')">📦<br>Orders</button><button onclick="show('account')">👤<br>Account</button></nav>
+<nav class="nav"><button onclick="show('home')">🏠<br>Home</button><button onclick="show('categories')">▦<br>Categories</button><button onclick="show('cart')">🛒<br>Cart <span id="badge"></span></button><button onclick="show('orders')">📦<br>Orders</button></nav>
 </div>
 <script>
 let products=[
@@ -451,14 +501,12 @@ function renderCart(){let el=document.getElementById('cartItems');if(!cart.lengt
 function chg(id,d){let x=cart.find(i=>i.id===id);x.q+=d;if(x.q<=0)cart=cart.filter(i=>i.id!==id);save()}
 function checkout(){let d=JSON.parse(localStorage.getItem('mmdetails')||'{}');document.getElementById('coName').value=d.name||'';document.getElementById('coPhone').value=d.phone||'';document.getElementById('coAddress').value=d.address||'';let total=cart.reduce((s,i)=>s+(()=>{const p=products.find(p=>p.id===i.id),v=(p.variants||[])[Number(i.variantIndex||0)];return (v?Number(v.price):Number(p.price||0))*i.q})(),0);document.getElementById('coTotal').innerHTML=`Items Total: <b>₹${total}</b><br>Delivery Charge: <b>₹15</b><br><hr>Total: <b>₹${total+15}</b>`;show('checkout')}
 function getCustomerId(){let id=localStorage.getItem('mmcustomerId');if(!id){id='MM-'+Math.random().toString(36).slice(2,8).toUpperCase();localStorage.setItem('mmcustomerId',id)}return id;}
-function saveDetails(){const pin=(document.getElementById('custPin')?.value||'').trim();if(!isAllowedPin(pin))return alert('Ye PIN abhi MeenaMa Delivery service area me nahi hai.');localStorage.setItem('mmdetails',JSON.stringify({name:custName.value,phone:custPhone.value,address:custAddress.value,pin}));updateCustomerUI();alert('Details saved! Customer ID: '+getCustomerId());show('home')}
-function updateCustomerUI(){const d=JSON.parse(localStorage.getItem('mmdetails')||'{}'),id=getCustomerId();['homeCustomerId','accountCustomerId'].forEach(x=>{const el=document.getElementById(x);if(el)el.textContent=id});const n=document.getElementById('homeCustomerName');if(n)n.textContent=d.name||'Customer';const pin=document.getElementById('custPin');if(pin)pin.value=d.pin||'';}
-
-function getDeliverySettings(){return JSON.parse(localStorage.getItem('mmsettings')||JSON.stringify({allowedPins:['712222'],ownerUpi:'',basePin:'712222'}));}
-function saveDeliverySettings(){const pins=(document.getElementById('allowedPins').value||'712222').split(',').map(x=>x.trim()).filter(Boolean);localStorage.setItem('mmsettings',JSON.stringify({allowedPins:pins,ownerUpi:document.getElementById('ownerUpi').value.trim(),basePin:document.getElementById('basePin').value.trim()||'712222'}));updateAreaLabel();toggleUpiPay();alert('Delivery settings save ho gayi.');}
-function loadDeliverySettings(){const s=getDeliverySettings();if(document.getElementById('allowedPins'))document.getElementById('allowedPins').value=s.allowedPins.join(',');if(document.getElementById('ownerUpi'))document.getElementById('ownerUpi').value=s.ownerUpi||'';if(document.getElementById('basePin'))document.getElementById('basePin').value=s.basePin||'712222';}
-function isAllowedPin(pin){const s=getDeliverySettings();return s.allowedPins.includes(String(pin).trim());}
-function updateAreaLabel(){const s=getDeliverySettings();const t=document.getElementById('areaTitle'),sub=document.getElementById('areaSub');if(t)t.textContent='📍 MeenaMa Delivery Area';if(sub)sub.textContent='PIN '+s.allowedPins.join(', ')+' service available';}
+function saveDetails(){localStorage.setItem('mmdetails',JSON.stringify({name:custName.value,phone:custPhone.value,address:custAddress.value,landmark:document.getElementById('custLandmark')?.value.trim()||''}));updateCustomerUI();alert('Details saved! Customer ID: '+getCustomerId());show('home')}
+function updateCustomerUI(){const d=JSON.parse(localStorage.getItem('mmdetails')||'{}'),id=getCustomerId();['homeCustomerId','accountCustomerId'].forEach(x=>{const el=document.getElementById(x);if(el)el.textContent=id});const n=document.getElementById('homeCustomerName');if(n)n.textContent=d.name||'Customer';}
+function getDeliverySettings(){return JSON.parse(localStorage.getItem('mmsettings')||JSON.stringify({ownerUpi:''}));}
+function saveDeliverySettings(){localStorage.setItem('mmsettings',JSON.stringify({ownerUpi:document.getElementById('ownerUpi')?.value.trim()||''}));toggleUpiPay();alert('Delivery settings save ho gayi.');}
+function loadDeliverySettings(){const s=getDeliverySettings();if(document.getElementById('ownerUpi'))document.getElementById('ownerUpi').value=s.ownerUpi||'';}
+function updateAreaLabel(){const t=document.getElementById('areaTitle'),sub=document.getElementById('areaSub');if(t)t.textContent='📍 MeenaMa Delivery';if(sub)sub.textContent='Local delivery service';}
 function requestCustomerLocation(){if(!navigator.geolocation)return alert('Aapke browser me location available nahi hai.');navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lon=pos.coords.longitude;localStorage.setItem('mmcustomerLocation',JSON.stringify({lat,lon,at:Date.now()}));updateLiveDistance(lat,lon);},()=>alert('Location permission Allow kijiye, tab live distance dikhaya jayega.'),{enableHighAccuracy:true,timeout:10000,maximumAge:30000});}
 function updateLiveDistance(lat,lon){const base={lat:22.7907,lon:88.3074};const R=6371,dLat=(lat-base.lat)*Math.PI/180,dLon=(lon-base.lon)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(base.lat*Math.PI/180)*Math.cos(lat*Math.PI/180)*Math.sin(dLon/2)**2;const km=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));const mins=Math.max(5,Math.round((km/22)*60+4));const d=document.getElementById('liveDistance'),e=document.getElementById('liveEta');if(d)d.textContent='📍 '+(km<10?km.toFixed(1):km.toFixed(0))+' km';if(e)e.textContent='🛵 लगभग '+mins+' min';}
 function initLiveLocation(){const saved=JSON.parse(localStorage.getItem('mmcustomerLocation')||'null');if(saved)updateLiveDistance(saved.lat,saved.lon);}
@@ -467,7 +515,7 @@ function openUpiPayment(){const s=getDeliverySettings();if(!s.ownerUpi)return al
 function playOrderAlert(){try{const C=window.AudioContext||window.webkitAudioContext;if(C){const c=new C(),o=c.createOscillator(),g=c.createGain();o.frequency.value=880;g.gain.value=.08;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.35);}}catch(e){} if('Notification' in window&&Notification.permission==='granted')new Notification('MeenaMa Delivery',{body:'New customer order received 🔔'});}
 function checkNewOrderAlert(){const orders=getSavedOrders();const seen=localStorage.getItem('mmseenOrderId')||'';const latest=orders[orders.length-1];const alertBox=document.getElementById('adminOrderAlert'),txt=document.getElementById('adminAlertText'),badge=document.getElementById('adminOrderBadge');if(!latest||latest.id===seen){if(badge)badge.style.display='none';return;}if(alertBox)alertBox.classList.add('show');if(txt)txt.textContent='Order #'+latest.id+' • '+(latest.name||'Customer')+' • ₹'+(latest.total||0);if(badge){badge.textContent='1';badge.style.display='inline-flex';}playOrderAlert();}
 function clearAdminAlert(){const orders=getSavedOrders(),latest=orders[orders.length-1];if(latest)localStorage.setItem('mmseenOrderId',latest.id);const a=document.getElementById('adminOrderAlert');if(a)a.classList.remove('show');const b=document.getElementById('adminOrderBadge');if(b)b.style.display='none';}
-function placeOrder(){if(!cart.length)return alert('Cart khaali hai');let name=coName.value.trim(),phone=coPhone.value.trim(),address=coAddress.value.trim(),pin=(document.getElementById('coPin')?.value||'').trim();if(!name||!phone||!address)return alert('Naam, mobile aur address bhariye.');if(!/^\d{6}$/.test(pin)||!isAllowedPin(pin))return alert('Ye PIN MeenaMa Delivery service area me nahi hai. Allowed PIN: '+getDeliverySettings().allowedPins.join(', '));let paymentMode=document.getElementById('payment').value;let items=cart.map(i=>{let p=products.find(x=>x.id===i.id);const v=(p.variants||[])[Number(i.variantIndex||0)];return {name:p.name,category:p.category,size:v?v.label:(p.size||p.unit||''),colour:p.colour||'',qty:i.q,price:v?Number(v.price):Number(p.price)||0}});let subtotal=items.reduce((s,i)=>s+i.price*i.qty,0),delivery=15,total=subtotal+delivery,orderId='MM'+Date.now().toString().slice(-6),date=new Date().toLocaleString('en-IN'),customerId=getCustomerId();let orderObj={id:orderId,customerId,name,total,subtotal,delivery,phone,address,pin,date,statusIndex:0,status:'Order Successfully Placed',cancelReason:'',paymentMode,items};const allOrders=getSavedOrders();allOrders.push(orderObj);saveOrders(allOrders);localStorage.setItem('mmdetails',JSON.stringify({name,phone,address,pin}));localStorage.setItem('mmorder',JSON.stringify(orderObj));localStorage.setItem('mmnewOrder','1');let lines=items.map(i=>`${i.name} x ${i.qty} = ₹${i.price*i.qty}`).join('\n');let msg=`Namaste MeenaMa Delivery Service!%0AOrder ID: ${orderId}%0ACustomer ID: ${customerId}%0A%0A${encodeURIComponent(lines)}%0A%0ASubtotal: ₹${subtotal}%0ADelivery: ₹${delivery}%0ATotal: ₹${total}%0APayment: ${encodeURIComponent(paymentMode)}%0APIN: ${encodeURIComponent(pin)}%0AName: ${encodeURIComponent(name)}%0AMobile: ${encodeURIComponent(phone)}%0AAddress: ${encodeURIComponent(address)}`;cart=[];save();renderCustomerOrder(orderObj);document.getElementById('orderBox').insertAdjacentHTML('beforeend',`<div class="section"><p>Customer ID: <b>${customerId}</b></p><a class="wa" href="https://wa.me/?text=${msg}" target="_blank">💬 WhatsApp Order</a></div>`);document.getElementById('deliveryStatus').style.display='block';show('orders')}
+function placeOrder(){if(!cart.length)return alert('Cart khaali hai');let name=coName.value.trim(),phone=coPhone.value.trim(),address=coAddress.value.trim(),landmark=document.getElementById('coLandmark')?.value.trim()||'';if(!name||!phone||!address||!landmark)return alert('Naam, mobile, full address aur landmark bhariye.');address=address+' | Landmark: '+landmark;let paymentMode=document.getElementById('payment').value;let items=cart.map(i=>{let p=products.find(x=>x.id===i.id);const v=(p.variants||[])[Number(i.variantIndex||0)];return {name:p.name,category:p.category,size:v?v.label:(p.size||p.unit||''),colour:p.colour||'',qty:i.q,price:v?Number(v.price):Number(p.price)||0}});let subtotal=items.reduce((s,i)=>s+i.price*i.qty,0),delivery=15,total=subtotal+delivery,orderId='MM'+Date.now().toString().slice(-6),date=new Date().toLocaleString('en-IN'),customerId=getCustomerId();let orderObj={id:orderId,customerId,name,total,subtotal,delivery,phone,address,date,statusIndex:0,status:'Order Successfully Placed',cancelReason:'',paymentMode,items};const allOrders=getSavedOrders();allOrders.push(orderObj);saveOrders(allOrders);localStorage.setItem('mmdetails',JSON.stringify({name,phone,address:coAddress.value.trim(),landmark}));localStorage.setItem('mmorder',JSON.stringify(orderObj));localStorage.setItem('mmnewOrder','1');let lines=items.map(i=>`${i.name} x ${i.qty} = ₹${i.price*i.qty}`).join('\n');let msg=`Namaste MeenaMa Delivery Service!%0AOrder ID: ${orderId}%0ACustomer ID: ${customerId}%0A%0A${encodeURIComponent(lines)}%0A%0ASubtotal: ₹${subtotal}%0ADelivery: ₹${delivery}%0ATotal: ₹${total}%0APayment: ${encodeURIComponent(paymentMode)}%0AName: ${encodeURIComponent(name)}%0AMobile: ${encodeURIComponent(phone)}%0AAddress: ${encodeURIComponent(address)}`;cart=[];save();renderCustomerOrder(orderObj);document.getElementById('orderBox').insertAdjacentHTML('beforeend',`<div class="section"><p>Customer ID: <b>${customerId}</b></p></div>`);document.getElementById('deliveryStatus').style.display='block';show('orders')}
 
 function returnWindowOpen(o){return !!(o&&o.status==='Delivered'&&o.deliveredAt&&Date.now()<=Number(o.deliveredAt)+72*60*60*1000);}
 function returnOptionHtml(o){if(o.status==='Return Requested')return `<p style="color:#9a6700"><b>Return Status:</b> Return Requested<br><b>Reason:</b> ${o.returnReason||'—'}</p>`;if(returnWindowOpen(o))return `<button class="btn" style="background:#fff7e6;color:#8a5700;border:1px solid #edcf8b;width:100%;margin:8px 0" onclick="returnCustomerOrder('${o.id}')">↩ Request Return (Within 72 Hours)</button><small>Return requests must be submitted within 72 hours after delivery.</small>`;if(o.status==='Delivered')return `<small style="color:#777">72 hours return window closed.</small>`;return '';}
@@ -629,9 +677,24 @@ function closeProduct(){document.getElementById('productModal').classList.remove
 function getSavedOrders(){
  return JSON.parse(localStorage.getItem('mmorders')||'[]');
 }
-function saveOrders(a){localStorage.setItem('mmorders',JSON.stringify(a)); fetch('/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});}
-async function syncMeenaMaOrders(){try{const r=await fetch('/api/orders',{cache:'no-store'});if(!r.ok)return;const a=await r.json();if(Array.isArray(a))localStorage.setItem('mmorders',JSON.stringify(a));}catch(e){/* offline fallback: local orders remain available */}}
-setInterval(syncMeenaMaOrders,5000);window.addEventListener('load',syncMeenaMaOrders);
+function saveOrders(a){
+ localStorage.setItem('mmorders',JSON.stringify(a));
+ // Sync order changes to the shared server. Offline use remains available.
+ fetch('https://meenama-delivery-app-9681.onrender.com/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:a})}).catch(()=>{});
+}
+async function syncMeenaMaOrders(){
+ try {
+  const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/orders'); if(!r.ok)return;
+  const remote=await r.json(); if(!Array.isArray(remote))return;
+  const local=getSavedOrders(), map=new Map(remote.map(o=>[String(o.id),o]));
+  for(const o of local){const old=map.get(String(o.id));map.set(String(o.id),old?{...o,...old}:o);}
+  const merged=Array.from(map.values()); localStorage.setItem('mmorders',JSON.stringify(merged));
+  const current=JSON.parse(localStorage.getItem('mmorder')||'null');
+  if(current){const latest=merged.find(o=>String(o.id)===String(current.id));if(latest){localStorage.setItem('mmorder',JSON.stringify(latest));if(typeof renderCustomerOrder==='function')renderCustomerOrder(latest);}}
+  if(document.getElementById('adminOrders')&&document.getElementById('adminPanel')?.style.display==='block')renderAdminOrders();
+ } catch(e) {}
+}
+document.addEventListener('DOMContentLoaded',()=>{syncMeenaMaOrders();setInterval(syncMeenaMaOrders,8000)});
 function renderAdminOrders(){
  const el=document.getElementById('adminOrders');
  const orders=getSavedOrders();
@@ -643,7 +706,7 @@ function renderAdminOrders(){
    return `<div class="order-admin">
    <b>Order #${o.id}</b><br>
    <small>${o.date||''}</small>
-   <p><b>Customer:</b> ${o.name||''}<br><b>Customer ID:</b> ${o.customerId||'—'}<br><b>Mobile:</b> ${o.phone||''}<br><b>PIN:</b> ${o.pin||'—'}<br><b>Address:</b> ${o.address||''}<br><b>Total:</b> ₹${o.total||0}<br><b>Payment:</b> ${o.paymentMode||'—'}</p>
+   <p><b>Customer:</b> ${o.name||''}<br><b>Customer ID:</b> ${o.customerId||'—'}<br><b>Mobile:</b> ${o.phone||''}<br><b>Address:</b> ${o.address||''}<br><b>Total:</b> ₹${o.total||0}<br><b>Payment:</b> ${o.paymentMode||'—'}</p>
    ${o.status==='Cancelled by Customer'?`<p style="color:#b42318"><b>Status:</b> Cancelled by Customer<br><b>Customer Reason:</b> ${o.cancelReason||'—'}</p>`:o.status==='Return Requested'?`<div class="return-reason"><b>↩️ RETURN REQUESTED</b><br><b>Reason:</b> ${o.returnReason||'—'}<br><b>Description:</b> ${o.returnDescription||'—'}<br><small>Requested: ${o.returnRequestedAt?new Date(o.returnRequestedAt).toLocaleString('en-IN'):'—'}</small></div>`:`<div>${labels.map((x,n)=>`<button class="status-btn ${n===s?'status-active':''}" onclick="setOrderStatus(${idx},${n})">${n+1}. ${x}</button>`).join('')}</div>`}<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn" onclick="adminInvoice(${idx})">🧾 Invoice</button><button class="btn" onclick="adminPrintInvoice(${idx})">🖨️ Print</button></div>
    </div>`;
  }).join('');
@@ -671,7 +734,7 @@ if(savedOrder){
  document.getElementById('deliveryStatus').style.display='block';
 }
 
-function renderInvoice(o,msg){if(!o)return;let rows=(o.items||[]).map(i=>`<tr><td>${i.name}<br><small>${i.size||''}${i.colour?' • '+i.colour:''}</small></td><td>${i.qty}</td><td>₹${i.price}</td><td>₹${i.price*i.qty}</td></tr>`).join('');document.getElementById('invoiceBox').innerHTML=`<div class="invoice" id="printInvoice"><h3>🛵 MeenaMa Delivery</h3><div><b>Order ID:</b> ${o.id} &nbsp; <b>Date:</b> ${o.date}</div><hr><b>Customer:</b> ${o.name}<br><b>Mobile:</b> ${o.phone}<br><b>Address:</b> ${o.address}<br><br><table><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>${rows}</table><p>Subtotal: ₹${o.subtotal}</p><p>Delivery Charge: ₹${o.delivery}</p><p class="grand">Total: ₹${o.total}</p><p>Payment Mode: <b>${o.paymentMode}</b></p><p>Order Status: <span class="badge2">${o.status}</span></p><p style="text-align:center">Thank you for ordering from MeenaMa Delivery! ❤️</p></div><div class="invoice-actions"><button class="btn checkout" onclick="window.print()">🖨️ Print / Save PDF</button><a class="wa" href="https://wa.me/?text=${encodeURIComponent('MeenaMa Delivery Bill\nOrder ID: '+o.id+'\nTotal: ₹'+o.total+'\nCustomer: '+o.name+'\nStatus: '+o.status)}" target="_blank">💬 Share Bill on WhatsApp</a></div>`}
+function renderInvoice(o,msg){if(!o)return;let rows=(o.items||[]).map(i=>`<tr><td>${i.name}<br><small>${i.size||''}${i.colour?' • '+i.colour:''}</small></td><td>${i.qty}</td><td>₹${i.price}</td><td>₹${i.price*i.qty}</td></tr>`).join('');document.getElementById('invoiceBox').innerHTML=`<div class="invoice" id="printInvoice"><h3>🛵 MeenaMa Delivery</h3><div><b>Order ID:</b> ${o.id} &nbsp; <b>Date:</b> ${o.date}</div><hr><b>Customer:</b> ${o.name}<br><b>Mobile:</b> ${o.phone}<br><b>Address:</b> ${o.address}<br><br><table><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>${rows}</table><p>Subtotal: ₹${o.subtotal}</p><p>Delivery Charge: ₹${o.delivery}</p><p class="grand">Total: ₹${o.total}</p><p>Payment Mode: <b>${o.paymentMode}</b></p><p>Order Status: <span class="badge2">${o.status}</span></p><p style="text-align:center">Thank you for ordering from MeenaMa Delivery! ❤️</p></div><div class="invoice-actions"></div>`}
 function saveFeedback(){let r=document.getElementById('feedbackRating').value,t=document.getElementById('feedbackText').value.trim();if(!t)return alert('Feedback likhiye.');let a=JSON.parse(localStorage.getItem('mmfeedbacks')||'[]');a.push({order:document.getElementById('feedbackOrder').value.trim(),product:document.getElementById('feedbackProduct').value.trim(),rating:Number(r),text:t,date:new Date().toLocaleString('en-IN')});localStorage.setItem('mmfeedbacks',JSON.stringify(a));renderAdminFeedback();document.getElementById('feedbackText').value='';document.getElementById('feedbackSaved').innerHTML='<div class="total">✅ Feedback saved. Thank you!</div>'}
 function voiceSearch(){
  const R=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -691,11 +754,22 @@ function filterProducts(q){
  document.getElementById('products').innerHTML=list.map(card).join('')||'<div class="empty">Product nahi mila.</div>';
  document.getElementById('productHeading').textContent=(activeCategory==='All'?'All Products':activeCategory)+(q?' — Search Results':'');
 }
-function loadCustomerProfile(){const d=JSON.parse(localStorage.getItem('mmdetails')||'{}');if(document.getElementById('custName'))document.getElementById('custName').value=d.name||'';if(document.getElementById('custPhone'))document.getElementById('custPhone').value=d.phone||'';if(document.getElementById('custPin'))document.getElementById('custPin').value=d.pin||'';if(document.getElementById('custAddress'))document.getElementById('custAddress').value=d.address||'';if(document.getElementById('coName'))document.getElementById('coName').value=d.name||'';if(document.getElementById('coPhone'))document.getElementById('coPhone').value=d.phone||'';if(document.getElementById('coPin'))document.getElementById('coPin').value=d.pin||'';if(document.getElementById('coAddress'))document.getElementById('coAddress').value=d.address||'';updateCustomerUI();updateAreaLabel();initLiveLocation();toggleUpiPay();}
+function loadCustomerProfile(){const d=JSON.parse(localStorage.getItem('mmdetails')||'{}');if(document.getElementById('custName'))document.getElementById('custName').value=d.name||'';if(document.getElementById('custPhone'))document.getElementById('custPhone').value=d.phone||'';if(document.getElementById('custAddress'))document.getElementById('custAddress').value=d.address||'';if(document.getElementById('custLandmark'))document.getElementById('custLandmark').value=d.landmark||'';if(document.getElementById('coName'))document.getElementById('coName').value=d.name||'';if(document.getElementById('coPhone'))document.getElementById('coPhone').value=d.phone||'';if(document.getElementById('coAddress'))document.getElementById('coAddress').value=d.address||'';if(document.getElementById('coLandmark'))document.getElementById('coLandmark').value=d.landmark||'';updateCustomerUI();updateAreaLabel();initLiveLocation();toggleUpiPay();}
 document.addEventListener('DOMContentLoaded',()=>{loadCustomerProfile();setInterval(()=>{if(document.getElementById('adminPanel')?.style.display==='block')checkNewOrderAlert();},10000);});
 </script><script>
 let mmDeferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();mmDeferredPrompt=e;const b=document.getElementById('installBtn');if(b)b.style.display='block';});
 document.addEventListener('click',e=>{if(e.target&&e.target.id==='installBtn'&&mmDeferredPrompt){mmDeferredPrompt.prompt();mmDeferredPrompt.userChoice.finally(()=>{mmDeferredPrompt=null;e.target.style.display='none';});}});
-</script><div id="pinGate" class="pin-gate"><div class="pin-card"><h2>📍 MeenaMa Delivery</h2><p style="color:#68736b;margin-top:4px">Service area check</p><p>Apna <b>PIN code</b> dijiye. Abhi service area <b>712222</b> hai.</p><input id="gatePin" class="field" inputmode="numeric" maxlength="6" placeholder="Enter PIN code"><div id="gateMsg" style="font-size:13px;margin:5px 0"></div><button class="btn checkout" onclick="unlockServiceArea()">Continue</button><small style="display:block;margin-top:10px;color:#777">Baad me Admin Settings se aur PIN codes add kiye ja sakte hain.</small></div></div><script>function unlockServiceArea(){const pin=(document.getElementById('gatePin').value||'').trim();if(isAllowedPin(pin)){localStorage.setItem('mmactivePin',pin);document.getElementById('pinGate').style.display='none';document.getElementById('gateMsg').textContent='';}else{document.getElementById('gateMsg').textContent='❌ Is PIN me abhi service available nahi hai.';document.getElementById('gateMsg').className='pin-bad';}}function initPinGate(){const pin=localStorage.getItem('mmactivePin')||'';if(pin&&isAllowedPin(pin)){document.getElementById('pinGate').style.display='none';}else{document.getElementById('pinGate').style.display='flex';}}document.addEventListener('DOMContentLoaded',()=>setTimeout(initPinGate,50));</script>
-</body></html>
+</script><script>
+(function(){
+ const api='https://meenama-delivery-app-9681.onrender.com/api/offers';
+ const escOffer=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ async function loadOffers(){
+  const box=document.getElementById('mmOffers');if(!box)return;
+  try{const r=await fetch(api,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const all=await r.json();if(!Array.isArray(all))throw Error('Invalid offers');localStorage.setItem('mmoffers',JSON.stringify(all));draw(all);}
+  catch(e){try{draw(JSON.parse(localStorage.getItem('mmoffers')||'[]'));}catch(_){draw([]);}}
+  function draw(all){const now=Date.now();const active=all.filter(o=>o.active!==false&&(!o.startsAt||Date.parse(o.startsAt)<=now)&&(!o.endsAt||Date.parse(o.endsAt)>now));box.innerHTML=active.length?active.map(o=>'<article class="mm-offer">'+(o.image?'<img class="mm-offer-photo" src="'+escOffer(o.image)+'" alt="Offer photo" loading="lazy">':'')+'<span class="mm-offer-badge">'+escOffer(o.badge||'OFFER')+'</span><b>'+escOffer(o.title)+'</b><span>'+escOffer(o.description||'MeenaMa Delivery par offer dekhein.')+'</span>'+(o.endsAt?'<strong class="mm-offer-countdown" data-offer-end="'+escOffer(o.endsAt)+'">Time left calculating…</strong>':'')+'</article>').join(''):'<article class="mm-offer"><b>Abhi koi live offer nahi</b><span>Naye offers jaldi aayenge.</span></article>';tickOfferTimers();}function tickOfferTimers(){document.querySelectorAll('[data-offer-end]').forEach(el=>{const left=Date.parse(el.dataset.offerEnd)-Date.now();if(left<=0){el.closest('.mm-offer')?.remove();return;}const total=Math.floor(left/1000),d=Math.floor(total/86400),h=Math.floor(total%86400/3600),m=Math.floor(total%3600/60),sec=total%60;el.textContent='⏳ '+(d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')+' left';});}
+ }
+ document.addEventListener('DOMContentLoaded',()=>{loadOffers();setInterval(loadOffers,30000);setInterval(tickOfferTimers,1000)});
+})();
+</script></body></html>
