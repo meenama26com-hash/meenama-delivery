@@ -66,6 +66,15 @@ app.put("/api/delivery-status", (req, res) => {
   res.json({ ok: true, count: req.body.deliveryBoys.length });
 });
 
+const OFFERS_DB = path.join(__dirname, "offers.json");
+function readOffers() { try { const value = JSON.parse(fs.readFileSync(OFFERS_DB, "utf8")); return Array.isArray(value) ? value : []; } catch { return []; } }
+function saveOffers(offers) { fs.writeFileSync(OFFERS_DB, JSON.stringify(offers, null, 2)); }
+app.get("/api/offers", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readOffers()); });
+app.put("/api/offers", (req, res) => {
+  if (!req.body || !Array.isArray(req.body.offers)) return res.status(400).json({ ok: false, error: "offers must be an array" });
+  const offers = req.body.offers.map((o, i) => ({ id: String(o.id || ("OFF" + Date.now() + i)), title: String(o.title || "").trim().slice(0,100), description: String(o.description || "").trim().slice(0,240), badge: String(o.badge || "OFFER").trim().slice(0,30), active: o.active !== false, updatedAt: new Date().toISOString() })).filter(o => o.title);
+  saveOffers(offers); res.json({ ok: true, count: offers.length, offers });
+});
 app.get("/api/orders", (req, res) => {
   res.json(readOrders());
 });
