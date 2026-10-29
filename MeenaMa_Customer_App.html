@@ -533,12 +533,12 @@ function returnCustomerOrder(orderId){
   renderCustomerOrder(o);
   alert('Return request submitted successfully. MeenaMa Delivery will review your request.');
 }
-function renderCustomerOrder(o){if(!o)return;document.getElementById('orderBox').innerHTML=`<div class="total"><b>${o.status==='Cancelled by Customer'?'Order Cancelled':'Order Details'}</b><p>Order ID: <b>${o.id}</b></p><p>Customer: ${o.name||''}</p><p>Delivery Status: <b>${o.status||'Order Successfully Placed'}</b></p>${o.status==='Return Requested'?`<div class="return-reason"><b>Return Request Submitted</b><br><b>Reason:</b> ${o.returnReason||'—'}<br><b>Description:</b> ${o.returnDescription||'—'}<br><small>Our team will review your return request.</small></div>`:o.status==='Cancelled by Customer'?`<p>Cancel Reason: ${o.cancelReason||'—'}</p>`:((o.statusIndex||0)<3?`<button class="btn" style="background:#fff0f0;color:#b42318;border:1px solid #efb5b5;width:100%;margin:8px 0" onclick="cancelCustomerOrder('${o.id}')">✖ Cancel Order</button><small>Cancel karne ka reason likhna zaroori hai.</small>`:returnOptionHtml(o))}<small>${o.date||''}</small></div>`;}
+function renderCustomerOrder(o){if(!o)return;document.getElementById('orderBox').innerHTML=`<div class="total"><b>${o.status==='Cancelled by Customer'?'Order Cancelled':'Order Details'}</b><p>Order ID: <b>${o.id}</b></p><p>Customer: ${o.name||''}</p><p>Delivery Status: <b>${o.status||'Order Successfully Placed'}</b></p>${o.status==='Return Requested'?`<div class="return-reason"><b>Return Request Submitted</b><br><b>Reason:</b> ${o.returnReason||'—'}<br><b>Description:</b> ${o.returnDescription||'—'}<br><small>Our team will review your return request.</small></div>`:o.status==='Cancelled by Customer'?`<p>Cancel Reason: ${o.cancelReason||'—'}</p>`:((o.statusIndex||0)<1?`<button class="btn" style="background:#fff0f0;color:#b42318;border:1px solid #efb5b5;width:100%;margin:8px 0" onclick="cancelCustomerOrder('${o.id}')">✖ Cancel Order</button><small>Order processing shuru hone se pehle hi cancel kar sakte hain.</small>`:returnOptionHtml(o))}<small>${o.date||''}</small></div>`;}
 function cancelCustomerOrder(orderId){
  const orders=getSavedOrders(),o=orders.find(x=>x.id===orderId);
  if(!o)return alert('Order nahi mila.');
  if(o.status==='Cancelled by Customer')return alert('Ye order pehle hi cancel ho chuka hai.');
- if((o.statusIndex||0)>=3)return alert('Delivered order cancel nahi ho sakta. Return ke liye owner se sampark karein.');
+ if((o.statusIndex||0)>=1)return alert('Order processing shuru ho chuki hai, ab cancel nahi ho sakta. Return ke liye delivery ke baad policy dekhein.');
  const reason=prompt('Order cancel karne ka reason Description me likhiye:');
  if(reason===null)return;
  if(!reason.trim())return alert('Cancel reason likhna zaroori hai.');
