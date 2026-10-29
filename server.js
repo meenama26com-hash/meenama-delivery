@@ -72,7 +72,7 @@ function saveOffers(offers) { fs.writeFileSync(OFFERS_DB, JSON.stringify(offers,
 app.get("/api/offers", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readOffers()); });
 app.put("/api/offers", (req, res) => {
   if (!req.body || !Array.isArray(req.body.offers)) return res.status(400).json({ ok: false, error: "offers must be an array" });
-  const offers = req.body.offers.map((o, i) => ({ id: String(o.id || ("OFF" + Date.now() + i)), title: String(o.title || "").trim().slice(0,100), description: String(o.description || "").trim().slice(0,240), badge: String(o.badge || "OFFER").trim().slice(0,30), active: o.active !== false, startsAt: o.startsAt ? new Date(o.startsAt).toISOString() : null, endsAt: o.endsAt ? new Date(o.endsAt).toISOString() : null, updatedAt: new Date().toISOString() })).filter(o => o.title);
+  const offers = req.body.offers.map((o, i) => ({ id: String(o.id || ("OFF" + Date.now() + i)), title: String(o.title || "").trim().slice(0,100), description: String(o.description || "").trim().slice(0,240), image: String(o.image || "").trim().slice(0,1200000), badge: String(o.badge || "OFFER").trim().slice(0,30), active: o.active !== false, startsAt: o.startsAt ? new Date(o.startsAt).toISOString() : null, endsAt: o.endsAt ? new Date(o.endsAt).toISOString() : null, updatedAt: new Date().toISOString() })).filter(o => o.title);
   saveOffers(offers); res.json({ ok: true, count: offers.length, offers });
 });
 app.get("/api/orders", (req, res) => {
