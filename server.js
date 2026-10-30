@@ -59,14 +59,14 @@ app.get("/api/delivery-status", (req, res) => {
   res.json(readDeliveryStatus());
 });
 app.patch("/api/delivery-status/:mobile", (req, res) => {
-  const mobile = String(req.params.mobile || "").replace(/\\D/g, "").slice(-10);
-  if (!/^\\d{10}$/.test(mobile)) return res.status(400).json({ ok: false, error: "Valid 10-digit mobile required" });
+  const mobile = String(req.params.mobile || "").replace(/\D/g, "").slice(-10);
+  if (!/^\d{10}$/.test(mobile)) return res.status(400).json({ ok: false, error: "Valid 10-digit mobile required" });
   const current = readDeliveryStatus();
   const list = Array.isArray(current.deliveryBoys) ? current.deliveryBoys : [];
   const incoming = req.body && typeof req.body === "object" ? req.body : {};
-  const prior = list.find(x => String(x.mobile || "").replace(/\\D/g, "").slice(-10) === mobile) || {};
+  const prior = list.find(x => String(x.mobile || "").replace(/\D/g, "").slice(-10) === mobile) || {};
   const entry = { ...prior, ...incoming, mobile, updatedAt: new Date().toISOString() };
-  const next = list.filter(x => String(x.mobile || "").replace(/\\D/g, "").slice(-10) !== mobile);
+  const next = list.filter(x => String(x.mobile || "").replace(/\D/g, "").slice(-10) !== mobile);
   next.push(entry);
   saveDeliveryStatus({ deliveryBoys: next });
   res.setHeader("Cache-Control", "no-store");
