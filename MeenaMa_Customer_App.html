@@ -753,7 +753,7 @@ function voiceSearch(){
  let finalText='';
  r.onresult=function(e){let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const text=e.results[i][0].transcript||'';if(e.results[i].isFinal)finalText+=text+' ';else interim+=text;}const box=document.getElementById('searchBox');if(box)box.value=(finalText+interim).trim();};
  r.onerror=function(e){if(e.error==='not-allowed'||e.error==='service-not-allowed')alert('Microphone permission Allow karein, phir dobara try karein.');else if(e.error==='no-speech')alert('Awaaz nahi mili. Mic dabakar product ka naam boliye.');else if(e.error==='network')alert('Voice service ke liye internet connection check karein.');else if(e.error!=='aborted')alert('Voice search mein problem hui. Dobara try karein.');};
- r.onend=function(){const q=(finalText||(document.getElementById('searchBox')?.value||'')).trim();resetVoiceButton();mmSpeechRecognition=null;if(q){const box=document.getElementById('searchBox');if(box)box.value=q;filterProducts(q);if(typeof show==='function')show('categories');}};
+ r.onend=function(){const q=(finalText||(document.getElementById('searchBox')?.value||'')).trim();resetVoiceButton();mmSpeechRecognition=null;if(q){const box=document.getElementById('searchBox');if(box)box.value=q;activeCategory='All';filterProducts(q);hideSuggestions();if(typeof show==='function')show('categories');const heading=document.getElementById('productHeading');if(heading)heading.textContent='Voice Search Results for “'+q+'”';document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});}};
  try{r.start();}catch(e){resetVoiceButton();mmSpeechRecognition=null;alert('Mic start nahi hua. Dobara dabayein aur permission check karein.');}
 }
 function filterProducts(q){
