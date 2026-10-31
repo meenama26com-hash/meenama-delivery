@@ -229,6 +229,30 @@ body{background:#f4f8f5!important;color:#202820}
 <style id="mm-mic-final-style">
 .voice{width:60px!important;height:60px!important;flex:0 0 60px!important;margin-left:8px!important;border:0!important;border-radius:50%!important;background:#111!important;color:#fff!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 3px 10px #0002!important;position:relative!important;transition:background .2s,transform .2s!important}.voice .mm-mic-icon{width:29px!important;height:29px!important;display:block!important}.voice.listening{background:#1769ff!important;animation:mmMicPulse 1.1s infinite!important;box-shadow:0 0 0 5px #1769ff20!important}.voice.listening .mm-mic-icon{transform:scale(1.08)}.voice:active{transform:scale(.94)!important}
 </style>
+
+<style id="mm-main-display-refresh">
+/* Main home display: calm 3D-inspired blue sky, golden sunrise and MeenaMa branding. */
+.mm-main-display{position:relative;isolation:isolate;overflow:hidden;margin:8px 12px 12px;min-height:166px;border-radius:18px;background:linear-gradient(155deg,#8ed7ff 0%,#d7f1ff 48%,#fff0bf 100%);box-shadow:0 7px 18px rgba(30,89,125,.13);color:#103d61}
+.mm-main-display:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,rgba(255,255,255,.2),transparent 48%,rgba(255,205,91,.2))}
+.mm-sky-glow{position:absolute;width:190px;height:190px;right:24px;top:-88px;border-radius:50%;background:radial-gradient(circle,#fff9d6 0 23%,#ffe28a 24% 36%,rgba(255,211,104,.28) 57%,transparent 72%);filter:blur(1px)}
+.mm-sun{position:absolute;width:66px;height:66px;right:78px;top:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffde4,#ffd45f 68%,#f7a82c);box-shadow:0 0 28px 12px rgba(255,207,92,.25)}
+.mm-cloud{position:absolute;height:17px;width:62px;border-radius:30px;background:rgba(255,255,255,.82);filter:drop-shadow(0 3px 3px rgba(49,116,151,.08))}
+.mm-cloud:before,.mm-cloud:after{content:"";position:absolute;bottom:4px;border-radius:50%;background:inherit}
+.mm-cloud:before{width:26px;height:26px;left:10px}.mm-cloud:after{width:20px;height:20px;left:29px}
+.mm-cloud-one{right:154px;top:40px;transform:scale(.8)}.mm-cloud-two{right:18px;top:83px;transform:scale(.62);opacity:.8}
+.mm-hill{position:absolute;z-index:-1;bottom:-53px;border-radius:50% 50% 0 0}
+.mm-hill-back{right:-30px;width:260px;height:115px;background:linear-gradient(160deg,#9bd6c0,#4eaa91);transform:rotate(-8deg)}
+.mm-hill-front{left:35%;bottom:-76px;width:310px;height:130px;background:linear-gradient(160deg,#6bc49a,#21845f);transform:rotate(5deg)}
+.mm-display-copy{position:relative;z-index:2;padding:20px 16px 17px;max-width:76%;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.mm-display-kicker{font-size:9px;font-weight:900;letter-spacing:2px;color:#24648a}
+.mm-display-copy strong{font-size:25px;line-height:1.08;font-weight:950;letter-spacing:-.8px;color:#075b43;text-shadow:0 1px 0 #ffffffa8}
+.mm-display-copy strong em{font-style:normal;color:#b77b00}
+.mm-display-line{font-size:11px;font-weight:700;color:#28516b;margin-top:2px}
+.mm-display-pill{margin-top:7px;padding:5px 8px;border-radius:20px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.85);font-size:7px;font-weight:900;letter-spacing:.55px;color:#236047}
+.mm-display-bag{position:absolute;z-index:2;right:19px;bottom:17px;font-size:43px;filter:drop-shadow(0 7px 5px rgba(20,76,50,.2));transform:rotate(-7deg)}
+@media(max-width:370px){.mm-main-display{min-height:151px;margin:7px 10px 10px}.mm-display-copy{padding:17px 13px;max-width:78%}.mm-display-copy strong{font-size:22px}.mm-display-bag{right:12px;bottom:14px;font-size:36px}.mm-sun{right:58px;width:58px;height:58px}}
+</style>
+
 </head>
 <body><div class="app">
 <header class="top"><div class="brand-wrap"><button type="button" onclick="show('account')" aria-label="Profile" title="Profile" style="width:42px;height:42px;flex:0 0 42px;border:1px solid #dce8de;border-radius:13px;background:#f4faf5;color:#08783a;font-size:22px;display:flex;align-items:center;justify-content:center;margin-right:9px">👤</button><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="handleSearchInput()" onkeydown="if(event.key==='Enter'){event.preventDefault();runSearch()}"><button id="searchButton" class="search-action" type="button" onclick="runSearch()">Search</button><button id="micButton" class="voice" onclick="voiceSearch()" title="Tap to speak" aria-label="Tap to speak"><svg class="mm-mic-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div></header>
@@ -236,6 +260,22 @@ body{background:#f4f8f5!important;color:#202820}
 <section id="home" class="screen active">
 <div class="mm-qc">
   <div class="mm-compact-welcome">Welcome</div>
+
+  <section id="mm-main-display" class="mm-main-display" aria-label="MeenaMa Delivery welcome display">
+    <div class="mm-sky-glow"></div>
+    <div class="mm-sun"></div>
+    <div class="mm-cloud mm-cloud-one"></div>
+    <div class="mm-cloud mm-cloud-two"></div>
+    <div class="mm-hill mm-hill-back"></div>
+    <div class="mm-hill mm-hill-front"></div>
+    <div class="mm-display-copy">
+      <span class="mm-display-kicker">WELCOME TO</span>
+      <strong>MeenaMa <em>Delivery</em></strong>
+      <span class="mm-display-line">Your daily needs, delivered with care.</span>
+      <span class="mm-display-pill">EVERYTHING YOU NEED • AT YOUR DOORSTEP</span>
+    </div>
+    <div class="mm-display-bag" aria-hidden="true">🛍️</div>
+  </section>
   <div class="section" style="padding:4px 0 0"><h3 style="padding:0 14px 8px">Shop by Category</h3><div id="homeCats" class="cats"></div><div id="mmCategoryPanel" class="mm-category-panel"></div></div>
   <div class="mm-offers-section"><div class="mm-best-title"><h3>Offers for You</h3><span>LIVE OFFERS</span></div><div id="mmOffers" class="mm-offers"><div class="mm-offer"><b>Offers loading…</b><br><span>Latest deals aa rahe hain.</span></div></div></div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
