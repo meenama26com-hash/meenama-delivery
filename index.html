@@ -695,8 +695,19 @@ async function syncMeenaMaOrders(){
   const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/orders'); if(!r.ok)return;
   const remote=await r.json(); if(!Array.isArray(remote))return;
   const local=getSavedOrders(), map=new Map(remote.map(o=>[String(o.id),o]));
-  for(const o of local){const old=map.get(String(o.id));map.set(String(o.id),old?{...o,...old}:o);}
+  let localIsNewer=false;
+  for(const o of local){
+   const serverOrder=map.get(String(o.id));
+   if(!serverOrder){map.set(String(o.id),o);localIsNewer=true;continue;}
+   const localTime=Number(o.updatedAt||o.createdAt||0),serverTime=Number(serverOrder.updatedAt||serverOrder.createdAt||0);
+   const winner=localTime>=serverTime?o:serverOrder;
+   if(winner===o&&localTime>serverTime)localIsNewer=true;
+   const history=[...(serverOrder.statusHistory||[]),...(o.statusHistory||[])];
+   const uniqueHistory=Array.from(new Map(history.filter(x=>x&&x.status).map(x=>[String(x.at||x.status),x])).values()).sort((a,b)=>Number(a.at||0)-Number(b.at||0));
+   map.set(String(o.id),{...serverOrder,...winner,statusHistory:uniqueHistory});
+  }
   const merged=Array.from(map.values()); localStorage.setItem('mmorders',JSON.stringify(merged));
+  if(localIsNewer)fetch('https://meenama-delivery-app-9681.onrender.com/api/orders',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({orders:merged})}).catch(()=>{});
   const current=JSON.parse(localStorage.getItem('mmorder')||'null');
   if(current){const latest=merged.find(o=>String(o.id)===String(current.id));if(latest){localStorage.setItem('mmorder',JSON.stringify(latest));if(typeof renderCustomerOrder==='function')renderCustomerOrder(latest);}}
   if(document.getElementById('adminOrders')&&document.getElementById('adminPanel')?.style.display==='block')renderAdminOrders();
