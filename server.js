@@ -42,6 +42,12 @@ app.post("/api/delivery-login", (req, res) => {
   res.json({ ok: true, mobile });
 });
 
+// Public merchant details only; the actual UPI ID is configured privately in Render env vars.
+app.get("/api/payment-settings", (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ payeeName: "MeenaMa Delivery", merchantUpi: String(process.env.MEENAMA_MERCHANT_UPI || "").trim() });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, app: "MeenaMa Delivery API" });
 });
