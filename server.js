@@ -49,11 +49,14 @@ app.get("/api/payment-settings", (req, res) => {
 });
 
 const PRICING_DB = path.join(__dirname, "delivery-settings.json");
-const DEFAULT_PRICING = { deliveryMode: "slabs", deliveryFee: 15, lowThreshold: 199, lowFee: 15, midThreshold: 499, midFee: 10, handlingFee: 0, platformFee: 0, surgeFee: 0, minimumOrder: 0, businessStatus: "open" };
+const DEFAULT_PRICING = { deliveryMode: "slabs", deliveryPricingMode: "slabs", deliveryFee: 15, lowThreshold: 199, lowFee: 15, midThreshold: 499, midFee: 10, includedKm: 2, perKmFee: 5, minDeliveryFee: 15, maxDeliveryFee: 60, freeDeliveryAbove: 0, handlingFee: 0, platformFee: 0, surgeFee: 0, minimumOrder: 0, businessStatus: "open" };
 function readPricing() { try { return { ...DEFAULT_PRICING, ...JSON.parse(fs.readFileSync(PRICING_DB, "utf8")) }; } catch { return { ...DEFAULT_PRICING }; } }
-function savePricing(value) { const clean = {}; for (const key of ["deliveryFee","lowThreshold","lowFee","midThreshold","midFee","handlingFee","platformFee","surgeFee","minimumOrder"]) { const n = Number(value[key]); if (!Number.isFinite(n) || n < 0) return null; clean[key] = n; } clean.deliveryMode = value.deliveryMode === "slabs" ? "slabs" : "fixed"; if (clean.midThreshold < clean.lowThreshold) return null; clean.businessStatus = value.businessStatus === "closed" ? "closed" : "open"; fs.writeFileSync(PRICING_DB, JSON.stringify(clean, null, 2)); return clean; }
+function savePricing(value) { const prior = readPricing(); const clean = { ...prior }; for (const key of ["deliveryFee","lowThreshold","lowFee","midThreshold","midFee","includedKm","perKmFee","minDeliveryFee","maxDeliveryFee","freeDeliveryAbove","handlingFee","platformFee","surgeFee","minimumOrder"]) { const raw = value[key] === undefined ? prior[key] : value[key]; const n = Number(raw); if (!Number.isFinite(n) || n < 0) return null; clean[key] = n; } clean.deliveryPricingMode = value.deliveryPricingMode === "distance" || value.deliveryMode === "distance" ? "distance" : (value.deliveryPricingMode || prior.deliveryPricingMode || "slabs"); clean.deliveryMode = clean.deliveryPricingMode === "distance" ? "distance" : (value.deliveryMode === "fixed" ? "fixed" : "slabs"); if (clean.midThreshold < clean.lowThreshold || clean.maxDeliveryFee < clean.minDeliveryFee) return null; clean.businessStatus = value.businessStatus === "closed" ? "closed" : "open"; fs.writeFileSync(PRICING_DB, JSON.stringify(clean, null, 2)); return clean; }
 app.get("/api/delivery-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readPricing()); });
 app.put("/api/delivery-settings", (req, res) => { const settings = savePricing(req.body || {}); if (!settings) return res.status(400).json({ ok: false, error: "Invalid delivery pricing settings" }); res.json({ ok: true, settings }); });
+// Backward-compatible alias used by the current green Admin HTML.
+app.get("/api/settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readPricing()); });
+app.put("/api/settings", (req, res) => { const settings = savePricing(req.body || {}); if (!settings) return res.status(400).json({ ok: false, error: "Invalid delivery pricing settings" }); res.json({ ok: true, settings }); });
 
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, app: "MeenaMa Delivery API" });
