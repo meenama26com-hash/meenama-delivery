@@ -49,7 +49,7 @@ app.get("/api/payment-settings", (req, res) => {
 });
 
 const PRICING_DB = path.join(__dirname, "delivery-settings.json");
-const DEFAULT_PRICING = { deliveryMode: "fixed", deliveryFee: 15, lowThreshold: 199, lowFee: 15, midThreshold: 499, midFee: 10, handlingFee: 0, platformFee: 0, surgeFee: 0, minimumOrder: 0, businessStatus: "open" };
+const DEFAULT_PRICING = { deliveryMode: "slabs", deliveryFee: 15, lowThreshold: 199, lowFee: 15, midThreshold: 499, midFee: 10, handlingFee: 0, platformFee: 0, surgeFee: 0, minimumOrder: 0, businessStatus: "open" };
 function readPricing() { try { return { ...DEFAULT_PRICING, ...JSON.parse(fs.readFileSync(PRICING_DB, "utf8")) }; } catch { return { ...DEFAULT_PRICING }; } }
 function savePricing(value) { const clean = {}; for (const key of ["deliveryFee","lowThreshold","lowFee","midThreshold","midFee","handlingFee","platformFee","surgeFee","minimumOrder"]) { const n = Number(value[key]); if (!Number.isFinite(n) || n < 0) return null; clean[key] = n; } clean.deliveryMode = value.deliveryMode === "slabs" ? "slabs" : "fixed"; if (clean.midThreshold < clean.lowThreshold) return null; clean.businessStatus = value.businessStatus === "closed" ? "closed" : "open"; fs.writeFileSync(PRICING_DB, JSON.stringify(clean, null, 2)); return clean; }
 app.get("/api/delivery-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readPricing()); });
