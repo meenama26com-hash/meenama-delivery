@@ -377,6 +377,7 @@ function deleteProduct(i){
  if(!confirm(`"${p.name}" ko delete karna hai?`)) return;
  products.splice(i,1);
  localStorage.setItem('mmproducts',JSON.stringify(products));
+ fetch('https://meenama-delivery-app-9681.onrender.com/api/products',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({products})}).catch(()=>{});
  cart=cart.filter(x=>products.some(p=>p.id===x.id));
  localStorage.setItem('mmcart',JSON.stringify(cart));
  render(); renderEditor(); renderAdminProducts();
@@ -430,7 +431,7 @@ function renderEditor(){
  <textarea class="field pe-description" data-i="${i}" rows="4" placeholder="Product ki puri details / description">${p.description||''}</textarea>
  </div>`).join('');
 }
-function saveProducts(showAlert=true){
+async function saveProducts(showAlert=true){
  document.querySelectorAll('.pe-name').forEach(e=>products[+e.dataset.i].name=e.value.trim()||'New Product');
  document.querySelectorAll('.pe-photo').forEach(e=>products[+e.dataset.i].photo=e.value.trim());
  document.querySelectorAll('.pe-price').forEach(e=>products[+e.dataset.i].price=Number(e.value)||0);
@@ -444,13 +445,15 @@ function saveProducts(showAlert=true){
  document.querySelectorAll('.pe-description').forEach(e=>products[+e.dataset.i].description=e.value.trim());
  localStorage.setItem('mmproducts',JSON.stringify(products));
  render(); renderEditor();
- if(showAlert) alert('All products saved successfully!');
+ try { const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/products',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({products})}); if(!r.ok) throw Error('HTTP '+r.status); const d=await r.json(); if(!d.ok) throw Error(d.error||'save failed'); if(showAlert) alert('Products server par save ho gaye. Admin aur Customer App dono mein shared hain.'); }
+ catch(e){ if(showAlert) alert('Local save hua, lekin server sync fail hua: '+e.message); }
 }
 let mmSearchHints=['Search atta, dal, milk and more...','Search biscuit, bread, eggs...','Search milk, Maggi, vegetables...','Search snacks, dairy, grocery...'];
 let mmHintIndex=0;
 setInterval(()=>{const b=document.getElementById('searchBox');if(b&&!b.value){mmHintIndex=(mmHintIndex+1)%mmSearchHints.length;b.placeholder=mmSearchHints[mmHintIndex];}},2200);
-function loadProducts(){
- const saved=JSON.parse(localStorage.getItem('mmproducts')||'null');
+async function loadProducts(){
+ let saved=JSON.parse(localStorage.getItem('mmproducts')||'null');
+ try { const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/products',{cache:'no-store'}); if(!r.ok) throw Error('HTTP '+r.status); const d=await r.json(); if(d.ok&&Array.isArray(d.products)&&d.products.length){ saved=d.products.map(p=>({...p,photos:Array.isArray(p.photos)?p.photos:(p.image?[p.image]:p.photo?[p.photo]:[]),photo:p.photo||p.image||'',variants:Array.isArray(p.variants)?p.variants:String(p.variants||'').split(',').map(x=>x.trim()).filter(Boolean).map(x=>{const a=x.split(':');return {label:(a[0]||'').trim(),price:Number(a[1])||0};})})); localStorage.setItem('mmproducts',JSON.stringify(saved)); } } catch(e){ console.warn('Shared products API unavailable; using saved local products.',e); }
  if(saved&&Array.isArray(saved)&&saved.length) products.splice(0,products.length,...saved);
  products.forEach((p,n)=>{if(!p.id)p.id=n+1;if(!p.category)p.category='Grocery';if(String(p.category).toLowerCase()==='costume')p.category='Others';if(!Array.isArray(p.photos))p.photos=p.photo?[p.photo]:[];if(p.rating==null)p.rating=5;if(p.reviews==null)p.reviews=0;if(!p.description)p.description='Product ki puri jankari yahan likhein.';if(!Array.isArray(p.variants))p.variants=[];if(p.video==null)p.video='';});
  localStorage.setItem('mmproducts',JSON.stringify(products));
