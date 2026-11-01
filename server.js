@@ -16,7 +16,7 @@ next();
 const PORT = process.env.PORT || 3000;
 const DB = path.join(__dirname, "orders.json");
 
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "12mb" }));
 app.use(express.static(__dirname));
 
 function readOrders() {
@@ -57,6 +57,23 @@ app.put("/api/delivery-settings", (req, res) => { const settings = savePricing(r
 
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, app: "MeenaMa Delivery API" });
+});
+
+// Shared product catalogue used by the existing Admin and Customer apps.
+const PRODUCTS_DB = path.join(__dirname, "products.json");
+function readProducts() { try { const v = JSON.parse(fs.readFileSync(PRODUCTS_DB, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; } }
+function saveProducts(items) { fs.writeFileSync(PRODUCTS_DB, JSON.stringify(items, null, 2)); }
+app.get("/api/products", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json({ ok: true, products: readProducts() }); });
+app.put("/api/products", (req, res) => {
+  const items = req.body && req.body.products;
+  if (!Array.isArray(items)) return res.status(400).json({ ok: false, error: "products must be an array" });
+  if (items.length > 2000) return res.status(413).json({ ok: false, error: "Too many products" });
+  for (const p of items) {
+    if (!p || typeof p !== "object" || !String(p.name || "").trim()) return res.status(400).json({ ok: false, error: "Every product needs a name" });
+  }
+  saveProducts(items);
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, count: items.length, products: items });
 });
 
 const DELIVERY_DB = path.join(__dirname, "delivery-status.json");
