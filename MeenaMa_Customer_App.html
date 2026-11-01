@@ -254,6 +254,28 @@ body{background:#f4f8f5!important;color:#202820}
 </style>
 
 <style id="mm-my-old-app-large-offers">.mm-offers-section{margin:10px 10px 16px;padding:16px 0 13px;background:linear-gradient(180deg,#f1fbf3,#fff);border:1px solid #d5ebda;border-radius:20px;box-shadow:0 6px 20px rgba(8,120,58,.09);overflow:hidden}.mm-offers-section .mm-best-title{padding:0 15px 12px}.mm-offers-section .mm-best-title h3{font-size:19px;color:#14532d}.mm-offers-section .mm-best-title span{background:#e5f7e9;color:#08783a;padding:6px 10px;border-radius:20px;font-weight:800;font-size:11px}.mm-offers{display:flex;gap:13px;overflow-x:auto;padding:0 13px 10px!important;scroll-snap-type:x mandatory;scrollbar-width:none}.mm-offers::-webkit-scrollbar{display:none}.mm-offer{flex:0 0 88%;max-width:340px;min-width:265px;position:relative;overflow:hidden;white-space:normal;background:#fff!important;border:1px solid #d5ebda!important;border-radius:18px!important;padding:12px!important;box-shadow:0 6px 18px rgba(13,75,37,.1);scroll-snap-align:start}.mm-offer-photo{width:100%;height:170px;max-height:none;object-fit:cover;border-radius:13px;margin-bottom:11px}.mm-offer .mm-offer-badge{display:inline-block;background:#08783a;color:white;border-radius:20px;padding:6px 10px;font-size:11px;font-weight:900;letter-spacing:.35px;margin-bottom:8px}.mm-offer b{display:block;font-size:17px;line-height:1.35;margin:3px 0 6px;color:#173b25}.mm-offer span{display:block;font-size:13px;line-height:1.5;color:#53665a}.mm-offer .mm-offer-prices{display:flex;align-items:baseline;gap:9px;margin:9px 0 3px}.mm-offer .mm-old-price{font-size:13px;color:#89948c;text-decoration:line-through}.mm-offer .mm-new-price{font-size:22px;color:#08783a;font-weight:900}.mm-offer .mm-save{font-size:11px;color:#08783a;background:#e9f8ed;border-radius:8px;padding:5px 8px;font-weight:800}.mm-offer .mm-offer-countdown{display:inline-block;margin-top:10px;padding:7px 10px;border-radius:10px;background:#fff4d8;color:#805400;font-size:12px;font-weight:800}.mm-offer-empty{padding:20px;text-align:center;background:#f8fbf8;border:1px dashed #cfe4d3;border-radius:13px;color:#53665a;font-size:13px}</style>
+
+<style id="mm-offers-yellow-theme">
+/* Full-width yellow treatment for the existing Customer App offers area */
+.mm-offers-section{
+  background:#ffdf3a!important;
+  padding:12px 0 16px!important;
+  margin:0!important;
+  width:100%!important;
+}
+.mm-offers-section .mm-best-title{padding:8px 14px 10px!important}
+.mm-offers-section .mm-best-title h3{color:#3b2b00!important}
+.mm-offers-section .mm-best-title span{color:#5b4300!important}
+.mm-offers-section .mm-offers{background:transparent!important}
+.mm-offers-section .mm-offer{
+  background:#fff8d6!important;
+  border:1px solid #e6bd22!important;
+  color:#3b2b00!important;
+}
+.mm-offers-section .mm-offer b{color:#3b2b00!important}
+.mm-offers-section .mm-offer span{color:#62501b!important}
+</style>
+
 </head>
 <body><div class="app">
 <header class="top"><div class="brand-wrap"><button type="button" onclick="show('account')" aria-label="My Account" title="My Account" style="position:relative;width:46px;height:46px;flex:0 0 46px;border:2px solid #bfe3c7;border-radius:50%;background:linear-gradient(145deg,#e9f8ed,#fff);color:#08783a;display:flex;align-items:center;justify-content:center;margin-right:9px;box-shadow:0 2px 7px #08783a18"><svg viewBox="0 0 40 40" width="31" height="31" aria-hidden="true"><circle cx="20" cy="13" r="7" fill="#08783a"/><path d="M7 34c.8-8 5.7-12 13-12s12.2 4 13 12" fill="#08783a"/><circle cx="31" cy="31" r="8" fill="#ffd21c" stroke="#fff" stroke-width="1.5"/><text x="31" y="34.2" text-anchor="middle" font-size="9" font-weight="900" fill="#174a2a">M</text></svg></button><div><div class="brand-main">MeenaMa <span>Delivery</span></div><div class="tag">Har Ghar Ki Zarurat, Ab Ghar Tak!</div></div></div><button id="installBtn" class="install-btn">📲 MeenaMa App Install Karein</button><div class="search-wrap"><div class="search">🔎<input id="searchBox" type="search" placeholder="Search atta, dal, milk and more..." oninput="handleSearchInput()" onkeydown="if(event.key==='Enter'){event.preventDefault();runSearch()}"><button id="searchButton" class="search-action" type="button" onclick="runSearch()">Search</button><button id="micButton" class="voice" onclick="voiceSearch()" title="Tap to speak" aria-label="Tap to speak"><svg class="mm-mic-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v4m-4 0h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div id="searchSuggestions" class="search-suggest" style="display:none"></div></div></header>
