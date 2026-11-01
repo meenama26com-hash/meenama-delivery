@@ -79,6 +79,22 @@ app.put("/api/products", (req, res) => {
   res.json({ ok: true, count: items.length, products: items });
 });
 
+// Shared Admin support data: extra settings, customer cases and festival display.
+const EXTRA_SETTINGS_DB = path.join(__dirname, "extra-settings.json");
+function readExtraSettings() { try { const v = JSON.parse(fs.readFileSync(EXTRA_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
+app.get("/api/extra-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readExtraSettings()); });
+app.put("/api/extra-settings", (req, res) => { const v = req.body; if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Settings must be an object" }); const clean = { upiId: String(v.upiId || "").trim().slice(0,100), upiName: String(v.upiName || "").trim().slice(0,100), lowStockLimit: Math.max(0, Math.min(100000, Number(v.lowStockLimit ?? 5))) }; if (!Number.isFinite(clean.lowStockLimit)) return res.status(400).json({ ok: false, error: "Invalid low-stock limit" }); fs.writeFileSync(EXTRA_SETTINGS_DB, JSON.stringify(clean, null, 2)); res.json({ ok: true, settings: clean }); });
+
+const CASES_DB = path.join(__dirname, "cases.json");
+function readCases() { try { const v = JSON.parse(fs.readFileSync(CASES_DB, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; } }
+app.get("/api/cases", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readCases()); });
+app.put("/api/cases", (req, res) => { const cases = req.body && req.body.cases; if (!Array.isArray(cases)) return res.status(400).json({ ok: false, error: "cases must be an array" }); if (cases.length > 5000) return res.status(413).json({ ok: false, error: "Too many cases" }); fs.writeFileSync(CASES_DB, JSON.stringify(cases, null, 2)); res.json({ ok: true, count: cases.length, cases }); });
+
+const DISPLAY_SETTINGS_DB = path.join(__dirname, "display-settings.json");
+function readDisplaySettings() { try { const v = JSON.parse(fs.readFileSync(DISPLAY_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
+app.get("/api/display-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readDisplaySettings()); });
+app.put("/api/display-settings", (req, res) => { const v = req.body; if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Display settings must be an object" }); const videoUrl = String(v.videoUrl || "").trim(); if (videoUrl && !/^https:\/\//i.test(videoUrl)) return res.status(400).json({ ok: false, error: "Video URL must use HTTPS" }); const clean = { mode: v.mode === "manual" ? "manual" : "auto", theme: String(v.theme || "durga").slice(0,40), title: String(v.title || "MeenaMa Festival Special").slice(0,120), videoUrl: videoUrl.slice(0,2000), updatedAt: new Date().toISOString() }; fs.writeFileSync(DISPLAY_SETTINGS_DB, JSON.stringify(clean, null, 2)); res.json({ ok: true, settings: clean }); });
+
 const DELIVERY_DB = path.join(__dirname, "delivery-status.json");
 function readDeliveryStatus() {
   try { return JSON.parse(fs.readFileSync(DELIVERY_DB, "utf8")); }
