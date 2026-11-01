@@ -357,15 +357,7 @@ body{background:#f4f8f5!important;color:#202820}
 <nav class="nav"><button onclick="show('home')">🏠<br>Home</button><button onclick="show('categories')">▦<br>Categories</button><button onclick="show('cart')">🛒<br>Cart <span id="badge"></span></button><button onclick="show('orders')">📦<br>Orders</button></nav>
 </div>
 <script>
-let products=[
-{id:1,name:'Product Name 1',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:2,name:'Product Name 2',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:3,name:'Product Name 3',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:4,name:'Product Name 4',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:5,name:'Product Name 5',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:6,name:'Product Name 6',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:7,name:'Product Name 7',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''},
-{id:8,name:'Product Name 8',price:0,old:0,unit:'Unit / Size',emoji:'🛍️',category:'Grocery',photos:[],description:'Product ki puri jankari yahan likhein.',rating:5,reviews:0,variants:[],video:''}];
+let products=[];
 let cart=JSON.parse(localStorage.getItem('mmcart')||'[]');
 function stars(r){r=Math.max(0,Math.min(5,Number(r)||0));return '★'.repeat(Math.round(r))+'☆'.repeat(5-Math.round(r))}
 function card(p){const src=(p.photos&&p.photos[0])||p.photo;const cat=String(p.category||'Grocery').replace(/'/g,"\\'");return `<div class="card" onclick="showRelatedProducts('${cat}')"><div class="pic">${src?`<img src="${src}" style="width:100%;height:100%;object-fit:contain;border-radius:14px">`:p.emoji}</div><div class="name">${p.name}</div><div class="meta">${p.unit||''} • ${p.category||''}</div><div class="price">₹${p.price||0}${p.old?` <span class="old">₹${p.old}</span>`:''}</div><button class="details-btn" onclick="event.stopPropagation();openProduct(${p.id})">View Details</button><button class="add" onclick="event.stopPropagation();add(${p.id})">ADD</button></div>`}
@@ -460,8 +452,9 @@ let mmSearchHints=['Search atta, dal, milk and more...','Search biscuit, bread, 
 let mmHintIndex=0;
 setInterval(()=>{const b=document.getElementById('searchBox');if(b&&!b.value){mmHintIndex=(mmHintIndex+1)%mmSearchHints.length;b.placeholder=mmSearchHints[mmHintIndex];}},2200);
 function loadProducts(){
- const saved=JSON.parse(localStorage.getItem('mmproducts')||'null');
- if(saved&&Array.isArray(saved)&&saved.length) products.splice(0,products.length,...saved);
+ if(localStorage.getItem('mmcatalogClearedV1')!=='1'){localStorage.setItem('mmproducts','[]');localStorage.setItem('mmcatalogClearedV1','1');}
+ const saved=JSON.parse(localStorage.getItem('mmproducts')||'[]');
+ if(Array.isArray(saved)) products.splice(0,products.length,...saved);
  products.forEach((p,n)=>{if(!p.id)p.id=n+1;if(!p.category)p.category='Grocery';if(String(p.category).toLowerCase()==='costume')p.category='Others';if(!Array.isArray(p.photos))p.photos=p.photo?[p.photo]:[];if(p.rating==null)p.rating=5;if(p.reviews==null)p.reviews=0;if(!p.description)p.description='Product ki puri jankari yahan likhein.';if(!Array.isArray(p.variants))p.variants=[];if(p.video==null)p.video='';});
  localStorage.setItem('mmproducts',JSON.stringify(products));
  render();
