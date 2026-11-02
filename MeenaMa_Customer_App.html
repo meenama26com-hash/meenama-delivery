@@ -476,6 +476,7 @@ function renderEditor(){
  <input class="field pe-old" data-i="${i}" type="number" value="${p.old||0}" placeholder="MRP / Old Price">
  <input class="field pe-unit" data-i="${i}" value="${p.unit||''}" placeholder="Size / Unit">
  <input class="field pe-category" data-i="${i}" value="${p.category||'Grocery'}" placeholder="Category">
+ <input class="field pe-brand" data-i="${i}" value="${p.brand||p.company||''}" placeholder="Company / Brand (e.g. Amul, Cadbury, Britannia)">
  <input class="field pe-rating" data-i="${i}" type="number" min="0" max="5" step="0.1" value="${p.rating??5}" placeholder="Star Rating 0–5">
  <input class="field pe-reviews" data-i="${i}" type="number" min="0" value="${p.reviews||0}" placeholder="Review Count">
  <textarea class="field pe-description" data-i="${i}" rows="4" placeholder="Product ki puri details / description">${p.description||''}</textarea>
@@ -490,6 +491,7 @@ async function saveProducts(showAlert=true){
  document.querySelectorAll('.pe-old').forEach(e=>products[+e.dataset.i].old=Number(e.value)||0);
  document.querySelectorAll('.pe-unit').forEach(e=>products[+e.dataset.i].unit=e.value.trim());
  document.querySelectorAll('.pe-category').forEach(e=>products[+e.dataset.i].category=e.value.trim()||'Grocery');
+ document.querySelectorAll('.pe-brand').forEach(e=>products[+e.dataset.i].brand=e.value.trim());
  document.querySelectorAll('.pe-rating').forEach(e=>products[+e.dataset.i].rating=Math.max(0,Math.min(5,Number(e.value)||0)));
  document.querySelectorAll('.pe-reviews').forEach(e=>products[+e.dataset.i].reviews=Math.max(0,Number(e.value)||0));
  document.querySelectorAll('.pe-description').forEach(e=>products[+e.dataset.i].description=e.value.trim());
@@ -772,6 +774,7 @@ function renderAdminProducts(){
  <input class="field ap-old" data-i="${i}" type="number" value="${p.old||0}" placeholder="MRP / Old Price">
  <input class="field ap-unit" data-i="${i}" value="${p.unit||''}" placeholder="Size / Unit">
  <input class="field ap-category" data-i="${i}" value="${p.category||'Grocery'}" placeholder="Category (e.g. Grocery, Dairy, Bakery)">
+ <input class="field ap-brand" data-i="${i}" value="${p.brand||p.company||''}" placeholder="Company / Brand (e.g. Amul, Cadbury, Britannia)">
  <input class="field ap-size" data-i="${i}" value="${p.size||''}" placeholder="Size (optional)">
  <input class="field ap-colour" data-i="${i}" value="${p.colour||''}" placeholder="Colour (optional)">
  <input class="field ap-rating" data-i="${i}" type="number" min="0" max="5" step="0.1" value="${p.rating??5}" placeholder="Star Rating 0–5">
@@ -788,6 +791,7 @@ function adminSaveProducts(){
  document.querySelectorAll('.ap-old').forEach(e=>products[+e.dataset.i].old=Number(e.value)||0);
  document.querySelectorAll('.ap-unit').forEach(e=>products[+e.dataset.i].unit=e.value);
  document.querySelectorAll('.ap-category').forEach(e=>products[+e.dataset.i].category=e.value.trim()||'Grocery');
+ document.querySelectorAll('.ap-brand').forEach(e=>products[+e.dataset.i].brand=e.value.trim());
  document.querySelectorAll('.ap-size').forEach(e=>products[+e.dataset.i].size=e.value.trim());
  document.querySelectorAll('.ap-colour').forEach(e=>products[+e.dataset.i].colour=e.value.trim());
  document.querySelectorAll('.ap-rating').forEach(e=>products[+e.dataset.i].rating=Math.max(0,Math.min(5,Number(e.value)||0)));
