@@ -555,7 +555,12 @@ function runSearch(){
  if(heading)heading.textContent=q?'Search Results for “'+q+'”':'All Products';
  document.getElementById('products')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
-function mmBrandOf(p){return String(p.brand||p.company||p.manufacturer||'').trim()||''}
+function mmBrandOf(p){
+ const explicit=String(p.brand||p.company||p.manufacturer||'').trim();if(explicit)return explicit;
+ const known=['Mother Dairy','Kwality Wall\\'s','Surf Excel','Coca-Cola','Haldiram\\'s','Nestlé','Nestle','Britannia','Cadbury','Parle','Amul','Lay\\'s','Lays','Bingo','ITC','Tata','Aashirvaad','Fortune','Patanjali','Dabur','Dove','Nivea','Himalaya','Colgate','Pepsi','Maggi','Ariel','Vim','Godrej','Kellogg\\'s','Kissan','Too Yumm','MTR','Everest','MDH','Catch','Pears','Lifebuoy','Dettol','Clinic Plus','Sunsilk','Lakmé','Mamaearth','Ponds','Rin','Ghadi','Surf'];
+ const name=String(p.name||'');
+ return known.find(b=>name.toLowerCase().startsWith(b.toLowerCase()))||'';
+}
 function mmVisibleProducts(){
  const q=(document.getElementById('searchBox')?.value||'').toLowerCase().trim();
  const brand=window.mmCatalogBrand||'All',sort=window.mmCatalogSort||'recommended';
@@ -575,13 +580,13 @@ function filterProducts(){
  if(heading)heading.textContent=(activeCategory==='All'?'All Products':activeCategory)+(document.getElementById('searchBox')?.value.trim()?' — Search Results':'');
  const count=document.getElementById('catalogCount');if(count)count.textContent=list.length+' products available';
  const shop=document.getElementById('catalogShopBrands');
- if(shop){const brands=[...new Set(products.filter(p=>activeCategory==='All'||(p.category||'Grocery')===activeCategory).map(mmBrandOf).filter(Boolean))];shop.innerHTML=brands.length?'<h3 class="mm-shop-brand-title">Shop by brands</h3><div class="mm-brand-chips">'+brands.map(b=>'<button class="mm-brand-chip" onclick="chooseCatalogBrand('+JSON.stringify(b).replace(/</g,'\\u003c')+')">'+b+'</button>').join('')+'</div>':'';}
+ if(shop){const brands=[...new Set(products.filter(p=>activeCategory==='All'||(p.category||'Grocery')===activeCategory).map(mmBrandOf).filter(Boolean))];shop.innerHTML=brands.length?'<h3 class="mm-shop-brand-title">Shop by brands</h3><div class="mm-brand-chips">'+brands.map(b=>'<button class="mm-brand-chip" data-brand="'+b.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')+'" onclick="chooseCatalogBrand(this.dataset.brand)">'+b+'</button>').join('')+'</div>':'';}
  renderCatalogBrandOptions();
 }
 function renderCatalogBrandOptions(){
  const brands=[...new Set(products.filter(p=>activeCategory==='All'||(p.category||'Grocery')===activeCategory).map(mmBrandOf).filter(Boolean))].sort();
  const sel=document.getElementById('catalogBrandSelect');if(sel){sel.innerHTML='<option value="All">All Brands</option>'+brands.map(b=>'<option value="'+b.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'">'+b+'</option>').join('');sel.value=window.mmCatalogBrand||'All';}
- const chips=document.getElementById('catalogBrandChips');if(chips){chips.innerHTML='<button class="mm-brand-chip '+((window.mmCatalogBrand||'All')==='All'?'active':'')+'" onclick="chooseCatalogBrand(\'All\')">All brands</button>'+brands.map(b=>'<button class="mm-brand-chip '+(window.mmCatalogBrand===b?'active':'')+'" onclick="chooseCatalogBrand('+JSON.stringify(b).replace(/</g,'\\u003c')+')">'+b+'</button>').join('');}
+ const chips=document.getElementById('catalogBrandChips');if(chips){chips.innerHTML='<button class="mm-brand-chip '+((window.mmCatalogBrand||'All')==='All'?'active':'')+'" onclick="chooseCatalogBrand(\'All\')">All brands</button>'+brands.map(b=>'<button class="mm-brand-chip '+(window.mmCatalogBrand===b?'active':'')+'" data-brand="'+b.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')+'" onclick="chooseCatalogBrand(this.dataset.brand)">'+b+'</button>').join('');}
 }
 function chooseCatalogBrand(brand){window.mmCatalogBrand=brand;const sel=document.getElementById('catalogBrandSelect');if(sel)sel.value=brand;applyCatalogControls();}
 function applyCatalogControls(){const sel=document.getElementById('catalogSort');if(sel)window.mmCatalogSort=sel.value;const brand=document.getElementById('catalogBrandSelect');if(brand)window.mmCatalogBrand=brand.value;filterProducts();const fc=document.getElementById('filterCount');if(fc)fc.textContent=(window.mmCatalogBrand&&window.mmCatalogBrand!=='All')?'• 1':'';}
