@@ -83,7 +83,31 @@ app.put("/api/products", (req, res) => {
 const EXTRA_SETTINGS_DB = path.join(__dirname, "extra-settings.json");
 function readExtraSettings() { try { const v = JSON.parse(fs.readFileSync(EXTRA_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
 app.get("/api/extra-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readExtraSettings()); });
-app.put("/api/extra-settings", (req, res) => { const v = req.body; if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Settings must be an object" }); const clean = { upiId: String(v.upiId || "").trim().slice(0,100), upiName: String(v.upiName || "").trim().slice(0,100), lowStockLimit: Math.max(0, Math.min(100000, Number(v.lowStockLimit ?? 5))) }; if (!Number.isFinite(clean.lowStockLimit)) return res.status(400).json({ ok: false, error: "Invalid low-stock limit" }); fs.writeFileSync(EXTRA_SETTINGS_DB, JSON.stringify(clean, null, 2)); res.json({ ok: true, settings: clean }); });
+app.put("/api/extra-settings", (req, res) => {
+  const v = req.body;
+  if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Settings must be an object" });
+  const prior = readExtraSettings();
+  const clean = {
+    ...prior,
+    upiId: String(v.upiId ?? prior.upiId ?? "").trim().slice(0, 100),
+    upiName: String(v.upiName ?? prior.upiName ?? "").trim().slice(0, 100),
+    lowStockLimit: Math.max(0, Math.min(100000, Number(v.lowStockLimit ?? prior.lowStockLimit ?? 5)))
+  };
+  if (!Number.isFinite(clean.lowStockLimit)) return res.status(400).json({ ok: false, error: "Invalid low-stock limit" });
+  if (v.categoryCatalogs !== undefined) {
+    if (!v.categoryCatalogs || typeof v.categoryCatalogs !== "object" || Array.isArray(v.categoryCatalogs)) return res.status(400).json({ ok: false, error: "categoryCatalogs must be an object" });
+    const size = Buffer.byteLength(JSON.stringify(v.categoryCatalogs), "utf8");
+    if (size > 10 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Catalog images are too large. Please use smaller images (10 MB total maximum)." });
+    clean.categoryCatalogs = v.categoryCatalogs;
+  }
+  if (v.catalogCategories !== undefined) {
+    if (!Array.isArray(v.catalogCategories) || v.catalogCategories.length > 300) return res.status(400).json({ ok: false, error: "catalogCategories must be an array (maximum 300)" });
+    clean.catalogCategories = v.catalogCategories.map(x => String(x || "").trim().slice(0, 100)).filter(Boolean);
+  }
+  fs.writeFileSync(EXTRA_SETTINGS_DB, JSON.stringify(clean, null, 2));
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, settings: clean });
+});
 
 const CASES_DB = path.join(__dirname, "cases.json");
 function readCases() { try { const v = JSON.parse(fs.readFileSync(CASES_DB, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; } }
