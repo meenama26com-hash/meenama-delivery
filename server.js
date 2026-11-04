@@ -100,6 +100,18 @@ app.put("/api/extra-settings", (req, res) => {
     if (size > 10 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Catalog images are too large. Please use smaller images (10 MB total maximum)." });
     clean.categoryCatalogs = v.categoryCatalogs;
   }
+  if (v.homePhotoCatalogs !== undefined) {
+    if (!Array.isArray(v.homePhotoCatalogs) || v.homePhotoCatalogs.length !== 4) {
+      return res.status(400).json({ ok: false, error: "homePhotoCatalogs must contain exactly 4 catalogs" });
+    }
+    if (Buffer.byteLength(JSON.stringify(v.homePhotoCatalogs), "utf8") > 10 * 1024 * 1024) {
+      return res.status(413).json({ ok: false, error: "Home catalog images are too large. Please use smaller images (10 MB total maximum)." });
+    }
+    clean.homePhotoCatalogs = v.homePhotoCatalogs.map((item, index) => ({
+      title: String(item?.title || ("Catalog " + (index + 1))).trim().slice(0, 100),
+      image: String(item?.image || "").slice(0, 2500000)
+    }));
+  }
   if (v.catalogCategories !== undefined) {
     if (!Array.isArray(v.catalogCategories) || v.catalogCategories.length > 300) return res.status(400).json({ ok: false, error: "catalogCategories must be an array (maximum 300)" });
     clean.catalogCategories = v.catalogCategories.map(x => String(x || "").trim().slice(0, 100)).filter(Boolean);
