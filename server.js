@@ -104,6 +104,26 @@ app.put("/api/extra-settings", (req, res) => {
     if (!Array.isArray(v.catalogCategories) || v.catalogCategories.length > 300) return res.status(400).json({ ok: false, error: "catalogCategories must be an array (maximum 300)" });
     clean.catalogCategories = v.catalogCategories.map(x => String(x || "").trim().slice(0, 100)).filter(Boolean);
   }
+  // Persist side-category catalog photos and nested category/variety structure.
+  // These are required by the existing Admin and Customer HTML apps.
+  if (v.sideCategoryCatalogs !== undefined) {
+    if (!v.sideCategoryCatalogs || typeof v.sideCategoryCatalogs !== "object" || Array.isArray(v.sideCategoryCatalogs)) {
+      return res.status(400).json({ ok: false, error: "sideCategoryCatalogs must be an object" });
+    }
+    if (Buffer.byteLength(JSON.stringify(v.sideCategoryCatalogs), "utf8") > 10 * 1024 * 1024) {
+      return res.status(413).json({ ok: false, error: "Side catalog images are too large. Please use smaller images (10 MB total maximum)." });
+    }
+    clean.sideCategoryCatalogs = v.sideCategoryCatalogs;
+  }
+  if (v.mmShopStructure !== undefined) {
+    if (!v.mmShopStructure || typeof v.mmShopStructure !== "object" || Array.isArray(v.mmShopStructure)) {
+      return res.status(400).json({ ok: false, error: "mmShopStructure must be an object" });
+    }
+    if (Buffer.byteLength(JSON.stringify(v.mmShopStructure), "utf8") > 2 * 1024 * 1024) {
+      return res.status(413).json({ ok: false, error: "Category structure is too large." });
+    }
+    clean.mmShopStructure = v.mmShopStructure;
+  }
   fs.writeFileSync(EXTRA_SETTINGS_DB, JSON.stringify(clean, null, 2));
   res.setHeader("Cache-Control", "no-store");
   res.json({ ok: true, settings: clean });
