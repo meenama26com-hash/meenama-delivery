@@ -112,6 +112,11 @@ app.put("/api/extra-settings", (req, res) => {
       image: String(item?.image || "").slice(0, 2500000)
     }));
   }
+  if (v.ownerPages !== undefined) {
+    if (!Array.isArray(v.ownerPages) || v.ownerPages.length > 100) return res.status(400).json({ ok: false, error: "ownerPages must be an array (maximum 100)" });
+    if (Buffer.byteLength(JSON.stringify(v.ownerPages), "utf8") > 2 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Owner pages are too large" });
+    clean.ownerPages = v.ownerPages.map((p,i)=>({ id:String(p.id||("PAGE"+i)).slice(0,80), title:String(p.title||"").trim().slice(0,70), text:String(p.text||"").trim().slice(0,600), image:String(p.image||"").trim().slice(0,2000), type:["notice","feature","promo"].includes(p.type)?p.type:"notice", active:p.active!==false })).filter(p=>p.title);
+  }
   if (v.catalogCategories !== undefined) {
     if (!Array.isArray(v.catalogCategories) || v.catalogCategories.length > 300) return res.status(400).json({ ok: false, error: "catalogCategories must be an array (maximum 300)" });
     clean.catalogCategories = v.catalogCategories.map(x => String(x || "").trim().slice(0, 100)).filter(Boolean);
