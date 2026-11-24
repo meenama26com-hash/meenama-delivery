@@ -17,6 +17,10 @@ const PORT = process.env.PORT || 3000;
 const DB = path.join(__dirname, "orders.json");
 
 app.use(express.json({ limit: "12mb" }));
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+const MEDIA_DIR = path.join(DATA_DIR, "media");
+fs.mkdirSync(MEDIA_DIR, { recursive: true });
+app.use("/media", express.static(MEDIA_DIR, { maxAge: "1d", immutable: true }));
 app.use(express.static(__dirname));
 
 function readOrders() {
@@ -182,6 +186,38 @@ function readCases() { try { const v = JSON.parse(fs.readFileSync(CASES_DB, "utf
 app.get("/api/cases", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readCases()); });
 app.put("/api/cases", (req, res) => { const cases = req.body && req.body.cases; if (!Array.isArray(cases)) return res.status(400).json({ ok: false, error: "cases must be an array" }); if (cases.length > 5000) return res.status(413).json({ ok: false, error: "Too many cases" }); fs.writeFileSync(CASES_DB, JSON.stringify(cases, null, 2)); res.json({ ok: true, count: cases.length, cases }); });
 
+// Owner-uploaded LED display media. Set DATA_DIR to a Render persistent disk mount (e.g. /var/data).
+app.post("/api/display-media", express.raw({ type: () => true, limit: "30mb" }), (req, res) => {
+  const mime = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
+  const allowed = {
+    "video/mp4": { ext: ".mp4", type: "video", max: 30 * 1024 * 1024 },
+    "video/webm": { ext: ".webm", type: "video", max: 30 * 1024 * 1024 },
+    "image/jpeg": { ext: ".jpg", type: "image", max: 5 * 1024 * 1024 },
+    "image/png": { ext: ".png", type: "image", max: 5 * 1024 * 1024 },
+    "image/webp": { ext: ".webp", type: "image", max: 5 * 1024 * 1024 }
+  };
+  const rule = allowed[mime];
+  if (!rule) return res.status(415).json({ ok: false, error: "Only MP4/WebM video and JPG/PNG/WebP images are supported." });
+  if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ ok: false, error: "No media file was received." });
+  if (req.body.length > rule.max) return res.status(413).json({ ok: false, error: rule.type === "video" ? "Video must be 30 MB or smaller." : "Each photo must be 5 MB or smaller." });
+  const crypto = require("crypto");
+  const fileName = "led-" + Date.now() + "-" + crypto.randomBytes(6).toString("hex") + rule.ext;
+  try {
+    fs.mkdirSync(MEDIA_DIR, { recursive: true });
+    fs.writeFileSync(path.join(MEDIA_DIR, fileName), req.body);
+    res.setHeader("Cache-Control", "no-store");
+    res.status(201).json({
+      ok: true,
+      type: rule.type,
+      name: String(req.query.name || fileName).slice(0, 160),
+      url: req.protocol + "://" + req.get("host") + "/media/" + fileName,
+      persistentStorage: Boolean(process.env.DATA_DIR)
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Could not save uploaded media." });
+  }
+});
+
 const DISPLAY_SETTINGS_DB = path.join(__dirname, "display-settings.json");
 function readDisplaySettings() { try { const v = JSON.parse(fs.readFileSync(DISPLAY_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
 app.get("/api/display-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readDisplaySettings()); });
@@ -192,13 +228,27 @@ app.put("/api/display-settings", (req, res) => {
   const imageUrl = String(v.imageUrl || "").trim();
   if (videoUrl && !/^https:\/\//i.test(videoUrl)) return res.status(400).json({ ok: false, error: "Video URL must use HTTPS" });
   if (imageUrl && !/^https:\/\//i.test(imageUrl)) return res.status(400).json({ ok: false, error: "Image URL must use HTTPS" });
+  const rawItems = Array.isArray(v.mediaItems) ? v.mediaItems : [];
+  if (rawItems.length > 6) return res.status(413).json({ ok: false, error: "Maximum 6 display media items are allowed." });
+  const mediaItems = rawItems.map(item => {
+    const itemUrl = String(item?.url || "").trim();
+    const type = item?.type === "video" ? "video" : "image";
+    if (!/^https:\/\//i.test(itemUrl)) throw new Error("Every uploaded media URL must use HTTPS.");
+    return { type, url: itemUrl.slice(0, 2000), name: String(item?.name || "").slice(0, 160) };
+  });
+  if (mediaItems.filter(x => x.type === "video").length > 1) return res.status(400).json({ ok: false, error: "Only one LED video can be active at a time." });
+  const requestedType = String(v.mediaType || "");
+  const mediaType = ["theme", "video", "images", "image"].includes(requestedType) ? requestedType : (videoUrl ? "video" : imageUrl ? "image" : "theme");
+  if (mediaType === "video" && !mediaItems.some(x => x.type === "video") && !videoUrl) return res.status(400).json({ ok: false, error: "Upload an MP4 video or provide a hosted HTTPS video URL." });
+  if ((mediaType === "images" || mediaType === "image") && !mediaItems.some(x => x.type === "image") && !imageUrl) return res.status(400).json({ ok: false, error: "Upload at least one display photo or provide a hosted HTTPS image URL." });
   const clean = {
     enabled: v.enabled !== false,
     mode: v.mode === "manual" ? "manual" : "auto",
     theme: String(v.theme || "everyday").slice(0,40),
     title: String(v.title || "MeenaMa Delivery").slice(0,120),
     subtitle: String(v.subtitle || "").slice(0,240),
-    mediaType: v.mediaType === "image" ? "image" : (videoUrl ? "video" : "theme"),
+    mediaType,
+    mediaItems,
     videoUrl: videoUrl.slice(0,2000),
     imageUrl: imageUrl.slice(0,2000),
     updatedAt: new Date().toISOString()
