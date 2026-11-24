@@ -208,7 +208,7 @@ async function loadLedControl(){
   const s=await r.json();ledSavedItems=Array.isArray(s.mediaItems)?s.mediaItems:[];
   $('ledEnabled').checked=s.enabled!==false;$('ledMediaType').value=s.mediaType||'theme';$('ledTitle').value=s.title||'';$('ledSubtitle').value=s.subtitle||'';$('ledImageUrl').value=s.imageUrl||'';$('ledVideoUrl').value=s.videoUrl||'';
   $('ledMediaPreview').innerHTML='';ledSavedItems.forEach(x=>{const el=document.createElement(x.type==='video'?'video':'img');el.src=x.url;el.style='width:92px;height:68px;object-fit:cover;border-radius:8px;background:#111';if(el.tagName==='VIDEO'){el.controls=true;el.playsInline=true;}$('ledMediaPreview').append(el);});
-  state.textContent='Server se LED settings load ho gayi.';
+  state.textContent='Server se LED settings load ho gayi.'+(s.persistentStorage===false?' Warning: Render persistent disk abhi configure nahi hai; upload files restart/redeploy ke baad mit sakti hain.':' Persistent storage available.');
  }catch(e){state.textContent='LED settings load nahi hui: '+e.message;}
 }
 async function saveLedControl(forceOff){
