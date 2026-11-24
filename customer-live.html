@@ -1636,3 +1636,43 @@ function closeAccountActionModal(){const m=document.getElementById('mmAccountAct
 function showAboutMeena(){mmOpenAccountModal('About MeenaMa Delivery','<div style="text-align:center;font-size:38px;margin:8px">🛵</div><p style="text-align:center;font-weight:800;color:#168343">Har Ghar Ki Zarurat, Ab Ghar Tak!</p><p>MeenaMa Delivery is your local delivery service for everyday essentials—grocery, vegetables and household needs—delivered conveniently to your home.</p><p><b>Local shopping. Easy ordering. Helpful delivery.</b></p>');}
 function enableMeenaNotifications(){const order=localStorage.getItem('mmNotifyOrders')!=='0',delivery=localStorage.getItem('mmNotifyDelivery')!=='0';mmOpenAccountModal('Notification preferences','<p>Choose which updates you want to receive. Your choices are saved on this device.</p><label class="mm-pref-row">Order updates <input type="checkbox" id="mmNotifyOrders" '+(order?'checked':'')+'></label><label class="mm-pref-row">Delivery alerts <input type="checkbox" id="mmNotifyDelivery" '+(delivery?'checked':'')+'></label><p id="mmNotifyStatus" style="font-size:12px"></p>');const a=document.getElementById('mmNotifyOrders'),b=document.getElementById('mmNotifyDelivery');a.onchange=()=>localStorage.setItem('mmNotifyOrders',a.checked?'1':'0');b.onchange=()=>localStorage.setItem('mmNotifyDelivery',b.checked?'1':'0');}
 </script>
+
+<script>
+// Shared owner-controlled LED display. Existing festival/calendar display remains the fallback.
+(async function applyOwnerLedDisplay(){
+ const el=document.getElementById('mmFestivalDisplay');if(!el)return;
+ try{
+  const response=await fetch(location.origin+'/api/display-settings?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok)return;
+  const s=await response.json();if(!s||!Object.keys(s).length)return;
+  if(s.enabled===false){el.style.display='none';return;}
+  el.style.display='';
+  const type=s.mediaType||'theme';
+  const title=String(s.title||'MeenaMa Delivery');
+  const subtitle=String(s.subtitle||'');
+  if(type==='video'&&s.videoUrl){
+   el.className='mm-festival-display mm-hd-video-active';
+   el.replaceChildren();
+   const video=document.createElement('video');video.className='mm-festival-hd-video';video.src=s.videoUrl;video.autoplay=true;video.muted=true;video.loop=true;video.playsInline=true;video.setAttribute('playsinline','');el.appendChild(video);
+   const caption=document.createElement('div');caption.className='mm-hd-video-caption';caption.textContent=title+(subtitle?' — '+subtitle:'');el.appendChild(caption);return;
+  }
+  if(type==='image'&&s.imageUrl){
+   el.className='mm-festival-display mm-hd-video-active';el.replaceChildren();
+   const img=document.createElement('img');img.src=s.imageUrl;img.alt=title;img.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover';el.appendChild(img);
+   const caption=document.createElement('div');caption.className='mm-hd-video-caption';caption.textContent=title+(subtitle?' — '+subtitle:'');el.appendChild(caption);return;
+  }
+  if(s.mode==='manual'&&(title||subtitle)){
+   el.className='mm-festival-display daily-theme';
+   const copy=document.createElement('div');copy.className='fest-copy';
+   const kicker=document.createElement('div');kicker.className='fest-kicker';kicker.textContent='MEENAMA SPECIAL';
+   const heading=document.createElement('div');heading.className='fest-title';heading.textContent=title;
+   const sub=document.createElement('div');sub.className='fest-sub';sub.textContent=subtitle;
+   copy.append(kicker,heading,sub);
+   const scene=document.createElement('div');scene.className='fest-scene';scene.setAttribute('aria-hidden','true');
+   const emoji=document.createElement('span');emoji.className='mm-fest-emoji';emoji.textContent='🛵';scene.appendChild(emoji);
+   el.replaceChildren(copy,scene);
+  }
+ }catch(e){console.warn('Owner LED settings could not be loaded',e);}
+})();
+</script>
+
