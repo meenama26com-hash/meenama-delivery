@@ -185,7 +185,28 @@ app.put("/api/cases", (req, res) => { const cases = req.body && req.body.cases; 
 const DISPLAY_SETTINGS_DB = path.join(__dirname, "display-settings.json");
 function readDisplaySettings() { try { const v = JSON.parse(fs.readFileSync(DISPLAY_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
 app.get("/api/display-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readDisplaySettings()); });
-app.put("/api/display-settings", (req, res) => { const v = req.body; if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Display settings must be an object" }); const videoUrl = String(v.videoUrl || "").trim(); if (videoUrl && !/^https:\/\//i.test(videoUrl)) return res.status(400).json({ ok: false, error: "Video URL must use HTTPS" }); const clean = { mode: v.mode === "manual" ? "manual" : "auto", theme: String(v.theme || "durga").slice(0,40), title: String(v.title || "MeenaMa Festival Special").slice(0,120), videoUrl: videoUrl.slice(0,2000), updatedAt: new Date().toISOString() }; fs.writeFileSync(DISPLAY_SETTINGS_DB, JSON.stringify(clean, null, 2)); res.json({ ok: true, settings: clean }); });
+app.put("/api/display-settings", (req, res) => {
+  const v = req.body;
+  if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Display settings must be an object" });
+  const videoUrl = String(v.videoUrl || "").trim();
+  const imageUrl = String(v.imageUrl || "").trim();
+  if (videoUrl && !/^https:\/\//i.test(videoUrl)) return res.status(400).json({ ok: false, error: "Video URL must use HTTPS" });
+  if (imageUrl && !/^https:\/\//i.test(imageUrl)) return res.status(400).json({ ok: false, error: "Image URL must use HTTPS" });
+  const clean = {
+    enabled: v.enabled !== false,
+    mode: v.mode === "manual" ? "manual" : "auto",
+    theme: String(v.theme || "everyday").slice(0,40),
+    title: String(v.title || "MeenaMa Delivery").slice(0,120),
+    subtitle: String(v.subtitle || "").slice(0,240),
+    mediaType: v.mediaType === "image" ? "image" : (videoUrl ? "video" : "theme"),
+    videoUrl: videoUrl.slice(0,2000),
+    imageUrl: imageUrl.slice(0,2000),
+    updatedAt: new Date().toISOString()
+  };
+  fs.writeFileSync(DISPLAY_SETTINGS_DB, JSON.stringify(clean, null, 2));
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, settings: clean });
+});
 
 const DELIVERY_DB = path.join(__dirname, "delivery-status.json");
 function readDeliveryStatus() {
