@@ -1723,3 +1723,46 @@ function closeAccountActionModal(){const m=document.getElementById('mmAccountAct
 function showAboutMeena(){mmOpenAccountModal('About MeenaMa Delivery','<div style="text-align:center;font-size:38px;margin:8px">🛵</div><p style="text-align:center;font-weight:800;color:#168343">Har Ghar Ki Zarurat, Ab Ghar Tak!</p><p>MeenaMa Delivery is your local delivery service for everyday essentials—grocery, vegetables and household needs—delivered conveniently to your home.</p><p><b>Local shopping. Easy ordering. Helpful delivery.</b></p>');}
 function enableMeenaNotifications(){const order=localStorage.getItem('mmNotifyOrders')!=='0',delivery=localStorage.getItem('mmNotifyDelivery')!=='0';mmOpenAccountModal('Notification preferences','<p>Choose which updates you want to receive. Your choices are saved on this device.</p><label class="mm-pref-row">Order updates <input type="checkbox" id="mmNotifyOrders" '+(order?'checked':'')+'></label><label class="mm-pref-row">Delivery alerts <input type="checkbox" id="mmNotifyDelivery" '+(delivery?'checked':'')+'></label><p id="mmNotifyStatus" style="font-size:12px"></p>');const a=document.getElementById('mmNotifyOrders'),b=document.getElementById('mmNotifyDelivery');a.onchange=()=>localStorage.setItem('mmNotifyOrders',a.checked?'1':'0');b.onchange=()=>localStorage.setItem('mmNotifyDelivery',b.checked?'1':'0');}
 </script>
+<style id="mm-led-upload-media-style">
+#mmFestivalDisplay.mm-hd-video-active{display:block;position:relative;height:190px;min-height:168px;padding:0;overflow:hidden;background:#061b13!important;border-radius:14px;isolation:isolate}
+#mmFestivalDisplay .mm-led-upload-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#mmFestivalDisplay .mm-led-upload-caption{position:absolute;z-index:2;left:14px;right:12px;bottom:12px;color:#fff;font-weight:900;font-size:18px;text-shadow:0 2px 6px #000}
+@media(max-width:420px){#mmFestivalDisplay.mm-hd-video-active{height:168px;min-height:168px}}
+</style>
+<script>
+(function MeenaMaOnlineLedMedia(){
+ const el=document.getElementById('mmFestivalDisplay');if(!el)return;
+ const original={className:el.className,html:el.innerHTML};
+ let lastSignature='',slideTimer=null;
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function stopSlides(){if(slideTimer){clearInterval(slideTimer);slideTimer=null;}}
+ function restoreTheme(){stopSlides();el.hidden=false;el.className=original.className;el.innerHTML=original.html;lastSignature='theme';}
+ function showVideo(v,items){
+  const it=items.find(x=>x.type==='video')||((v.videoUrl)?{url:v.videoUrl}:null);if(!it||!it.url)return;
+  const sig='video|'+it.url+'|'+(v.title||'');if(sig===lastSignature)return;
+  stopSlides();el.hidden=false;el.className='mm-festival-display mm-hd-video-active';
+  el.innerHTML='<video class="mm-festival-hd-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" src="'+esc(it.url)+'"></video>'+(v.title?'<div class="mm-led-upload-caption">'+esc(v.title)+'</div>':'');lastSignature=sig;
+ }
+ function showImages(v,items){
+  const imgs=items.filter(x=>x.type==='image'&&x.url);if(!imgs.length&&v.imageUrl)imgs.push({url:v.imageUrl});if(!imgs.length)return;
+  const sig='images|'+imgs.map(x=>x.url).join('|')+'|'+(v.title||'');if(sig===lastSignature)return;
+  stopSlides();el.hidden=false;el.className='mm-festival-display mm-hd-video-active';let n=0;
+  const draw=()=>{const it=imgs[n%imgs.length];el.innerHTML='<img class="mm-led-upload-image" alt="MeenaMa Delivery promotion" src="'+esc(it.url)+'">'+(v.title?'<div class="mm-led-upload-caption">'+esc(v.title)+'</div>':'');n++;};
+  draw();if(imgs.length>1)slideTimer=setInterval(draw,4500);lastSignature=sig;
+ }
+ async function load(){
+  try{
+   const r=await fetch('/api/display-settings?ts='+Date.now(),{cache:'no-store'});if(!r.ok)return;
+   const v=await r.json();if(!v||typeof v!=='object')return;
+   if(v.enabled===false){stopSlides();el.hidden=true;lastSignature='off';return;}
+   if(el.hidden)el.hidden=false;
+   const items=Array.isArray(v.mediaItems)?v.mediaItems:[];
+   const type=v.mediaType||'theme';
+   if(type==='video')showVideo(v,items);
+   else if(type==='images'||type==='image')showImages(v,items);
+   else if(lastSignature!=='theme')restoreTheme();
+  }catch(e){}
+ }
+ load();setInterval(load,30000);
+})();
+</script>
