@@ -807,11 +807,44 @@ function saveProducts(showAlert=true){
 let mmSearchHints=['Search atta, dal, milk and more...','Search biscuit, bread, eggs...','Search milk, Maggi, vegetables...','Search snacks, dairy, grocery...'];
 let mmHintIndex=0;
 setInterval(()=>{const b=document.getElementById('searchBox');if(b&&!b.value){mmHintIndex=(mmHintIndex+1)%mmSearchHints.length;b.placeholder=mmSearchHints[mmHintIndex];}},2200);
-function loadProducts(){
- const saved=JSON.parse(localStorage.getItem('mmproducts')||'null');
- if(saved&&Array.isArray(saved)&&saved.length) products.splice(0,products.length,...saved);
- products.forEach((p,n)=>{if(!p.id)p.id=n+1;if(!p.category)p.category='Grocery';if(String(p.category).toLowerCase()==='costume')p.category='Others';if(!Array.isArray(p.photos))p.photos=p.photo?[p.photo]:[];if(p.rating==null)p.rating=5;if(p.reviews==null)p.reviews=0;if(!p.description)p.description='Product ki puri jankari yahan likhein.';if(!Array.isArray(p.variants))p.variants=[];if(p.video==null)p.video='';});
- localStorage.setItem('mmproducts',JSON.stringify(products));
+async function loadProducts(){
+ const localSaved=(()=>{try{return JSON.parse(localStorage.getItem('mmproducts')||'null')}catch(e){return null}})();
+ if(Array.isArray(localSaved)&&localSaved.length) products.splice(0,products.length,...localSaved);
+ const normalize=(items)=>items.map((p,n)=>{
+   const item={...p};
+   if(!item.id)item.id=n+1;
+   if(!item.category)item.category='Grocery';
+   if(String(item.category).toLowerCase()==='costume')item.category='Others';
+   const mainPhoto=item.photo||item.image||(Array.isArray(item.photos)?item.photos[0]:'')||'';
+   if(!Array.isArray(item.photos))item.photos=mainPhoto?[mainPhoto]:[];
+   if(!item.photo)item.photo=item.photos[0]||mainPhoto;
+   if(item.rating==null)item.rating=5;
+   if(item.reviews==null)item.reviews=0;
+   if(!item.description)item.description='Product ki puri jankari yahan likhein.';
+   if(!Array.isArray(item.variants)){
+     item.variants=typeof item.variants==='string'
+       ? item.variants.split('|').map(x=>{const a=x.trim().split('=');return {label:(a[0]||'').trim(),price:Number((a[1]||'').trim())||0}}).filter(v=>v.label)
+       : [];
+   }
+   if(item.video==null)item.video='';
+   return item;
+ });
+ let loadedFromServer=false;
+ try{
+   const response=await fetch(MEENAMA_API_BASE+'/api/products?ts='+Date.now(),{cache:'no-store'});
+   if(!response.ok)throw new Error('HTTP '+response.status);
+   const data=await response.json();
+   if(data&&Array.isArray(data.products)&&data.products.length){
+     products.splice(0,products.length,...normalize(data.products));
+     loadedFromServer=true;
+     localStorage.setItem('mmproducts',JSON.stringify(products));
+   }
+ }catch(error){console.warn('Shared product sync unavailable; using this device cache.',error);}
+ if(!loadedFromServer&&(!Array.isArray(localSaved)||!localSaved.length)){
+   products.splice(0,products.length,...normalize(products));
+ }
+ products.forEach((p,n)=>Object.assign(p,normalize([p])[0]));
+ try{localStorage.setItem('mmproducts',JSON.stringify(products));}catch(e){console.warn('Local product cache is full.',e);}
  render();
  renderEditor();
 }
