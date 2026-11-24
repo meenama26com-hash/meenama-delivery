@@ -115,7 +115,7 @@ app.put("/api/extra-settings", (req, res) => {
   if (v.ownerPages !== undefined) {
     if (!Array.isArray(v.ownerPages) || v.ownerPages.length > 100) return res.status(400).json({ ok: false, error: "ownerPages must be an array (maximum 100)" });
     if (Buffer.byteLength(JSON.stringify(v.ownerPages), "utf8") > 2 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Owner pages are too large" });
-    clean.ownerPages = v.ownerPages.map((p,i)=>({ id:String(p.id||("PAGE"+i)).slice(0,80), title:String(p.title||"").trim().slice(0,70), text:String(p.text||"").trim().slice(0,600), image:String(p.image||"").trim().slice(0,2000), type:["notice","feature","promo"].includes(p.type)?p.type:"notice", buttonText:String(p.buttonText||"").trim().slice(0,30), buttonUrl:String(p.buttonUrl||"").trim().slice(0,2000), active:p.active!==false })).filter(p=>p.title);
+    clean.ownerPages = v.ownerPages.map((p,i)=>({ id:String(p.id||("PAGE"+i)).slice(0,80), title:String(p.title||"").trim().slice(0,70), text:String(p.text||"").trim().slice(0,600), image:(()=>{const im=String(p.image||"").trim();if(/^https:\/\//i.test(im))return im.slice(0,2000);if(/^data:image\/(jpeg|png|webp);base64,/i.test(im)&&im.length<=1700000)return im;return "";})(), type:["notice","feature","promo"].includes(p.type)?p.type:"notice", buttonText:String(p.buttonText||"").trim().slice(0,30), buttonUrl:String(p.buttonUrl||"").trim().slice(0,2000), active:p.active!==false })).filter(p=>p.title);
   }
   if (v.catalogCategories !== undefined) {
     if (!Array.isArray(v.catalogCategories) || v.catalogCategories.length > 300) return res.status(400).json({ ok: false, error: "catalogCategories must be an array (maximum 300)" });
