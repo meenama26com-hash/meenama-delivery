@@ -99,12 +99,7 @@ async function mmMasterSave(config){
   const get=await fetch(API_BASE+'/api/extra-settings?ts='+Date.now(),{cache:'no-store'});
   if(!get.ok)throw Error('Settings API HTTP '+get.status);
   const current=await get.json();
-  const preserved=Array.isArray(current.ownerPages)?current.ownerPages.filter(p=>!String(p.id||'').startsWith('MASTER_')):[];
-  const published=(config.items||[]).filter(x=>x&&x.visible!==false&&x.name).sort((a,b)=>(a.order||0)-(b.order||0)).map(x=>{
-   const url=/^https:\/\//i.test(String(x.action||'').trim())?String(x.action).trim():'';
-   return {id:'MASTER_'+String(x.id||''),title:String(x.name||'').slice(0,70),text:String(x.description||'').slice(0,600),image:String(x.image||''),type:x.kind==='banner'?'promo':(x.kind==='page'?'feature':'notice'),buttonText:url?'Open':'',buttonUrl:url,active:true};
-  });
-  const put=await fetch(API_BASE+'/api/extra-settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...current,masterConfig:config,ownerPages:[...preserved,...published]})});
+  const put=await fetch(API_BASE+'/api/extra-settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...current,masterConfig:config})});
   const result=await put.json().catch(()=>({}));
   if(!put.ok||result.ok!==true)throw Error(result.error||('Publish HTTP '+put.status));
   status.textContent='Published online. Visible controls Customer App ke MeenaMa Updates section mein refresh ke baad dikhenge.';
