@@ -1417,12 +1417,39 @@ function mmOfferIsLive(o,now){if(o.active===false)return false;const start=o.sta
 function renderLiveOffers(list){const box=document.getElementById('mmLiveOffers');if(!box)return;const now=Date.now(),live=(Array.isArray(list)?list:[]).filter(o=>mmOfferIsLive(o,now));if(!live.length){box.innerHTML='<div class="mm-offer"><b>🎁 No live offer right now</b><br>MeenaMa ke naye offers jald aayenge.</div>';return;}box.innerHTML=live.map(o=>{const end=o.endsAt?new Date(o.endsAt).getTime():0;const img=o.image?'<img src="'+mmOfferEsc(o.image)+'" alt="'+mmOfferEsc(o.title)+'">':'';return '<article class="mm-live-offer">'+img+'<div class="offer-copy"><span class="offer-badge">'+mmOfferEsc(o.badge||'LIVE OFFER')+'</span><b>'+mmOfferEsc(o.title)+'</b><p>'+mmOfferEsc(o.description||'')+'</p>'+(end?'<small>Ends: '+new Date(end).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})+'</small>':'')+'</div></article>';}).join('');}
 async function loadLiveOffers(){const status=document.getElementById('mmOfferLiveStatus');try{const r=await fetch(MEENAMA_OFFERS_API,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);const list=await r.json();renderLiveOffers(list);if(status)status.textContent=' • LIVE';}catch(e){if(status)status.textContent=' • Offline';const box=document.getElementById('mmLiveOffers');if(box&&!box.children.length)box.innerHTML='<div class="mm-offer">Offers abhi load nahi hue. Internet connection check karein.</div>';}}
 function mmStudioEscape(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function mmMasterItemsAsPages(config){
+ const items=config&&Array.isArray(config.items)?config.items:[];
+ return items.filter(x=>x&&x.visible!==false&&x.name).sort((a,b)=>(Number(a.order)||0)-(Number(b.order)||0)).map(x=>{
+  const url=/^https:\/\//i.test(String(x.action||"").trim())?String(x.action).trim():"";
+  const image=String(x.image||"");
+  return {id:"MASTER_"+String(x.id||""),title:String(x.name||"").slice(0,70),text:String(x.description||"").slice(0,600),image,buttonText:url?"Open":"",buttonUrl:url,active:true};
+ });
+}
+function mmApplyMasterFeatures(config){
+ const features=config&&config.features&&typeof config.features==="object"?config.features:{};
+ const selectors={
+  account:['#account','[onclick*="account"]'],
+  addressBook:['.mm-address-summary','.mm-profile-row[onclick*="openProfileEditor"]'],
+  watchlist:['#favorites','.mm-profile-row[onclick*="favorites"]'],
+  payment:['.mm-profile-row[onclick*="openPaymentSettings"]'],
+  cash:['#payment option:first-child'],
+  orderTracking:['#tracking'],
+  deliveryDistance:['.mm-store-eta'],
+  feedback:['#feedbackBox','.mm-profile-row[onclick*="openFeedback"]'],
+  shareApp:['.mm-profile-row[onclick*="shareMeenaApp"]'],
+  notifications:['.mm-profile-row[onclick*="enableMeenaNotifications"]'],
+  help:['.mm-profile-row[onclick*="openMeenaHelp"]'],
+  replacement:['.mm-profile-row[onclick*="openLatestReturn"]','.detail-policy'],
+  offers:['.mm-profile-row[onclick*="showOffers"]']
+ };
+ Object.entries(selectors).forEach(([key,list])=>list.forEach(selector=>document.querySelectorAll(selector).forEach(el=>{el.style.display=features[key]===false?'none':'';})));
+}
 async function mmLoadOwnerStudioSections(){
  const box=document.getElementById('mmOwnerStudioSections');if(!box)return;
  try{
   const r=await fetch(MEENAMA_API_BASE+'/api/extra-settings?ts='+Date.now(),{cache:'no-store'});
   if(!r.ok)throw new Error('HTTP '+r.status);
-  const settings=await r.json(),pages=Array.isArray(settings.ownerPages)?settings.ownerPages.filter(p=>p&&p.active!==false&&String(p.title||'').trim()):[];
+  const settings=await r.json(),basePages=Array.isArray(settings.ownerPages)?settings.ownerPages.filter(p=>p&&p.active!==false&&String(p.title||'').trim()):[],masterPages=mmMasterItemsAsPages(settings.masterConfig),pages=[...basePages,...masterPages];mmApplyMasterFeatures(settings.masterConfig);
   if(!pages.length){box.innerHTML='';box.hidden=true;return;}
   box.hidden=false;
   box.innerHTML=pages.map(p=>{
