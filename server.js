@@ -45,7 +45,7 @@ app.post("/api/delivery-login", (req, res) => {
 // Public merchant details only; the actual UPI ID is configured privately in Render env vars.
 app.get("/api/payment-settings", (req, res) => {
   res.setHeader("Cache-Control", "no-store");
-  res.json({ payeeName: "MeenaMa Delivery", merchantUpi: String(process.env.MEENAMA_MERCHANT_UPI || "").trim() });
+  res.json({ payeeName: "MeenaMa Delivery", merchantUpi: String(process.env.MEENAMA_MERCHANT_UPI || "Q11922473@ybl").trim() });
 });
 
 const PRICING_DB = path.join(__dirname, "delivery-settings.json");
