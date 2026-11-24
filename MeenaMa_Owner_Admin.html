@@ -21,11 +21,15 @@
 <h3>💡 Home LED / 3D Display Control</h3>
 <p class="muted">LED ko kabhi bhi ON/OFF karein. Apna text, photo ya video lagayein. Save karne par Customer App mein server se update hoga.</p>
 <label style="display:flex;align-items:center;gap:10px"><input id="ledEnabled" type="checkbox" checked style="width:auto"> Customer App par LED display ON rakhein</label>
-<label>Display content type<select id="ledMediaType"><option value="theme">Festival / 3D automatic display</option><option value="image">Photo / Banner</option><option value="video">Video</option></select></label>
+<label>Display content type<select id="ledMediaType"><option value="theme">Festival / 3D automatic display</option><option value="images">Photo slideshow (up to 6)</option><option value="image">Single photo URL</option><option value="video">Video</option></select></label>
 <label>Heading<input id="ledTitle" maxlength="120" placeholder="MeenaMa Delivery"></label>
 <label>Sub-heading / message<textarea id="ledSubtitle" maxlength="240" rows="2" placeholder="Apna message likhein"></textarea></label>
-<label>Photo URL (HTTPS)<input id="ledImageUrl" type="url" placeholder="https://... image link"></label>
-<label>Video URL (HTTPS)<input id="ledVideoUrl" type="url" placeholder="https://... video link"></label>
+<label>Photo URL (HTTPS, optional)<input id="ledImageUrl" type="url" placeholder="https://... image link"></label>
+<label>Video URL (HTTPS, optional)<input id="ledVideoUrl" type="url" placeholder="https://... video link"></label>
+<label>🖼️ Upload photos / banners (up to 6, maximum 5 MB each)<input id="ledImageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+<label>🎬 Upload MP4 / WebM video (maximum 30 MB)<input id="ledVideoFile" type="file" accept="video/mp4,video/webm"></label>
+<div id="ledMediaPreview" class="muted" style="display:flex;gap:7px;flex-wrap:wrap;margin:8px 0"></div>
+<button id="ledClearMedia" type="button" class="danger">Remove uploaded photo / video</button>
 <div class="row"><button id="ledSave" type="button">💾 Save LED Display</button><button id="ledOff" type="button" class="danger">LED Pura Band Karo</button></div>
 <p id="ledState" class="muted">LED settings server se load hongi.</p>
 </div><div class="card"><h3>Manage created controls</h3><div id="masterItems"></div></div>
@@ -168,32 +172,79 @@ $('masterExport')?.addEventListener('click',()=>{const blob=new Blob([JSON.strin
 $('masterImport')?.addEventListener('click',()=>$('masterImportFile').click());
 $('masterImportFile')?.addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const data=JSON.parse(await file.text()),config=data.master||data;if(!Array.isArray(config.items)||!config.features)throw Error('Invalid settings file');await mmMasterSave(config);mmMasterRenderFeatures();mmMasterRenderItems();alert('Settings imported and published.');}catch(err){alert('Import failed: '+err.message);}e.target.value='';});
 
+// LED photo/video upload controls. Existing automatic 3D display remains the default.
+let ledSelectedVideo=null, ledSelectedImages=[], ledSavedItems=[];
+function ledPreviewFile(file){
+ const box=$('ledMediaPreview');if(!box)return;
+ const el=document.createElement(file.type.startsWith('video/')?'video':'img');
+ el.src=URL.createObjectURL(file);el.style='width:92px;height:68px;object-fit:cover;border-radius:8px;background:#111';
+ if(el.tagName==='VIDEO'){el.controls=true;el.playsInline=true;}
+ box.append(el);
+}
+$('ledVideoFile')?.addEventListener('change',()=>{
+ const f=$('ledVideoFile').files?.[0]||null;ledSelectedVideo=f;
+ if(!f)return;
+ if(!['video/mp4','video/webm'].includes(f.type)){alert('MP4 ya WebM video chunen.');$('ledVideoFile').value='';ledSelectedVideo=null;return;}
+ if(f.size>30*1024*1024){alert('Video 30 MB se chhoti rakhein.');$('ledVideoFile').value='';ledSelectedVideo=null;return;}
+ $('ledMediaPreview').innerHTML='';ledPreviewFile(f);
+});
+$('ledImageFiles')?.addEventListener('change',()=>{
+ const fs=Array.from($('ledImageFiles').files||[]);
+ if(fs.length>6){alert('Ek baar mein adhiktam 6 photos chunen.');$('ledImageFiles').value='';ledSelectedImages=[];return;}
+ if(fs.some(f=>!['image/jpeg','image/png','image/webp'].includes(f.type))){alert('JPG, PNG ya WebP photo chunen.');$('ledImageFiles').value='';ledSelectedImages=[];return;}
+ if(fs.some(f=>f.size>5*1024*1024)){alert('Har photo 5 MB se chhoti rakhein.');$('ledImageFiles').value='';ledSelectedImages=[];return;}
+ ledSelectedImages=fs;$('ledMediaPreview').innerHTML='';fs.forEach(ledPreviewFile);
+});
+async function uploadLedMedia(file){
+ const r=await fetch(API_BASE+'/api/display-media?name='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type},body:file});
+ const out=await r.json().catch(()=>({}));if(!r.ok||!out.url)throw Error(out.error||('Upload HTTP '+r.status));
+ return {type:out.type,url:out.url,name:file.name};
+}
+
 // Owner-controlled home LED display: shared through the display-settings API.
 async function loadLedControl(){
  const state=$('ledState');try{
   const r=await fetch(API_BASE+'/api/display-settings?ts='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);
-  const s=await r.json();$('ledEnabled').checked=s.enabled!==false;$('ledMediaType').value=s.mediaType||'theme';$('ledTitle').value=s.title||'';$('ledSubtitle').value=s.subtitle||'';$('ledImageUrl').value=s.imageUrl||'';$('ledVideoUrl').value=s.videoUrl||'';
+  const s=await r.json();ledSavedItems=Array.isArray(s.mediaItems)?s.mediaItems:[];
+  $('ledEnabled').checked=s.enabled!==false;$('ledMediaType').value=s.mediaType||'theme';$('ledTitle').value=s.title||'';$('ledSubtitle').value=s.subtitle||'';$('ledImageUrl').value=s.imageUrl||'';$('ledVideoUrl').value=s.videoUrl||'';
+  $('ledMediaPreview').innerHTML='';ledSavedItems.forEach(x=>{const el=document.createElement(x.type==='video'?'video':'img');el.src=x.url;el.style='width:92px;height:68px;object-fit:cover;border-radius:8px;background:#111';if(el.tagName==='VIDEO'){el.controls=true;el.playsInline=true;}$('ledMediaPreview').append(el);});
   state.textContent='Server se LED settings load ho gayi.';
  }catch(e){state.textContent='LED settings load nahi hui: '+e.message;}
 }
 async function saveLedControl(forceOff){
- const state=$('ledState'),payload={
-  enabled:forceOff?false:$('ledEnabled').checked,
-  mode:'manual',theme:'everyday',
-  mediaType:$('ledMediaType').value,
-  title:$('ledTitle').value.trim()||'MeenaMa Delivery',
-  subtitle:$('ledSubtitle').value.trim(),
-  imageUrl:$('ledImageUrl').value.trim(),
-  videoUrl:$('ledVideoUrl').value.trim()
- };
- if(payload.mediaType==='image'&&!payload.imageUrl&&!forceOff)return alert('Photo URL dalo.');
- if(payload.mediaType==='video'&&!payload.videoUrl&&!forceOff)return alert('Video URL dalo.');
+ const state=$('ledState');state.textContent='LED media save ho raha hai…';
  try{
+  let items=ledSavedItems.slice(),imageUrl=$('ledImageUrl').value.trim(),videoUrl=$('ledVideoUrl').value.trim(),mediaType=$('ledMediaType').value;
+  if(!forceOff&&mediaType==='video'){
+   if(ledSelectedVideo){items=[await uploadLedMedia(ledSelectedVideo)];videoUrl=items[0].url;imageUrl='';}
+   items=items.filter(x=>x.type==='video').slice(0,1);
+   if(!items.length&&!videoUrl)throw Error('MP4 video select karein ya HTTPS video URL dein.');
+  }else if(!forceOff&&(mediaType==='images'||mediaType==='image')){
+   if(ledSelectedImages.length){items=[];for(const f of ledSelectedImages)items.push(await uploadLedMedia(f));}
+   items=items.filter(x=>x.type==='image').slice(0,6);
+   if(items.length){imageUrl=items[0].url;videoUrl='';}
+   if(!items.length&&!imageUrl)throw Error('Photo select karein ya HTTPS image URL dein.');
+  }else if(mediaType==='theme'||forceOff){items=[];imageUrl='';videoUrl='';}
+  const payload={
+   enabled:forceOff?false:$('ledEnabled').checked,
+   mode:'manual',theme:'everyday',mediaType:forceOff?'theme':mediaType,
+   title:$('ledTitle').value.trim()||'MeenaMa Delivery',
+   subtitle:$('ledSubtitle').value.trim(),
+   imageUrl,videoUrl,mediaItems:items
+  };
   const r=await fetch(API_BASE+'/api/display-settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
   const out=await r.json().catch(()=>({}));if(!r.ok||!out.ok)throw Error(out.error||('HTTP '+r.status));
-  state.textContent=forceOff?'LED Customer App se band kar diya gaya.':'LED settings online save ho gayi. Customer App refresh karein.';
- }catch(e){state.textContent='Save nahi hua: '+e.message;}
+  ledSavedItems=items;ledSelectedVideo=null;ledSelectedImages=[];$('ledVideoFile').value='';$('ledImageFiles').value='';
+  state.textContent=forceOff?'LED Customer App se band kar diya gaya.':'LED online save ho gaya. Customer App par 30 second ke andar update hoga.';
+  if(!forceOff)await loadLedControl();
+ }catch(e){state.textContent='Save/upload nahi hua: '+e.message;}
 }
+$('ledClearMedia')?.addEventListener('click',async()=>{
+ if(!confirm('Customer App se uploaded photo/video hata dein?'))return;
+ $('ledMediaType').value='theme';$('ledImageUrl').value='';$('ledVideoUrl').value='';
+ ledSelectedVideo=null;ledSelectedImages=[];ledSavedItems=[];$('ledVideoFile').value='';$('ledImageFiles').value='';$('ledMediaPreview').innerHTML='';
+ await saveLedControl(false);
+});
 $('ledSave')?.addEventListener('click',()=>saveLedControl(false));
 $('ledOff')?.addEventListener('click',()=>{if(confirm('Customer App se LED display poori tarah band kar dein?')){ $('ledEnabled').checked=false;saveLedControl(true);}});
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function safe(v){return String(v??'').replace(/[^a-zA-Z0-9_-]/g,'')}
