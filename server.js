@@ -210,7 +210,7 @@ app.post("/api/display-media", express.raw({ type: () => true, limit: "30mb" }),
       ok: true,
       type: rule.type,
       name: String(req.query.name || fileName).slice(0, 160),
-      url: req.protocol + "://" + req.get("host") + "/media/" + fileName,
+      url: (String(req.get("x-forwarded-proto") || req.protocol).split(",")[0].trim() === "https" ? "https" : "http") + "://" + req.get("host") + "/media/" + fileName,
       persistentStorage: Boolean(process.env.DATA_DIR)
     });
   } catch (error) {
@@ -220,7 +220,7 @@ app.post("/api/display-media", express.raw({ type: () => true, limit: "30mb" }),
 
 const DISPLAY_SETTINGS_DB = path.join(__dirname, "display-settings.json");
 function readDisplaySettings() { try { const v = JSON.parse(fs.readFileSync(DISPLAY_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
-app.get("/api/display-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readDisplaySettings()); });
+app.get("/api/display-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json({ ...readDisplaySettings(), persistentStorage: Boolean(process.env.DATA_DIR) }); });
 app.put("/api/display-settings", (req, res) => {
   const v = req.body;
   if (!v || typeof v !== "object" || Array.isArray(v)) return res.status(400).json({ ok: false, error: "Display settings must be an object" });
