@@ -117,6 +117,37 @@ app.put("/api/extra-settings", (req, res) => {
     if (Buffer.byteLength(JSON.stringify(v.ownerPages), "utf8") > 2 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Owner pages are too large" });
     clean.ownerPages = v.ownerPages.map((p,i)=>({ id:String(p.id||("PAGE"+i)).slice(0,80), title:String(p.title||"").trim().slice(0,70), text:String(p.text||"").trim().slice(0,600), image:(()=>{const im=String(p.image||"").trim();if(/^https:\/\//i.test(im))return im.slice(0,2000);if(/^data:image\/(jpeg|png|webp);base64,/i.test(im)&&im.length<=1700000)return im;return "";})(), type:["notice","feature","promo"].includes(p.type)?p.type:"notice", buttonText:String(p.buttonText||"").trim().slice(0,30), buttonUrl:String(p.buttonUrl||"").trim().slice(0,2000), active:p.active!==false })).filter(p=>p.title);
   }
+  if (v.masterConfig !== undefined) {
+    const m = v.masterConfig;
+    if (!m || typeof m !== "object" || Array.isArray(m)) return res.status(400).json({ ok: false, error: "masterConfig must be an object" });
+    if (!Array.isArray(m.items) || m.items.length > 100) return res.status(400).json({ ok: false, error: "masterConfig.items must be an array (maximum 100)" });
+    if (!m.features || typeof m.features !== "object" || Array.isArray(m.features)) return res.status(400).json({ ok: false, error: "masterConfig.features must be an object" });
+    if (Buffer.byteLength(JSON.stringify(m), "utf8") > 2 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Master settings are too large (2 MB maximum)." });
+    const features = {};
+    for (const [key, value] of Object.entries(m.features)) {
+      if (/^[a-zA-Z0-9_-]{1,60}$/.test(key)) features[key] = value === true;
+    }
+    clean.masterConfig = {
+      version: 1,
+      updatedAt: String(m.updatedAt || new Date().toISOString()).slice(0, 40),
+      features,
+      items: m.items.map((item, index) => {
+        const image = String(item?.image || "").trim();
+        const safeImage = /^https:\/\//i.test(image) ? image.slice(0, 2000) :
+          (/^data:image\/(jpeg|png|webp);base64,/i.test(image) && image.length <= 1700000 ? image : "");
+        return {
+          id: String(item?.id || ("MC" + index)).slice(0, 80),
+          kind: ["page", "section", "button", "banner"].includes(item?.kind) ? item.kind : "section",
+          name: String(item?.name || "").trim().slice(0, 70),
+          description: String(item?.description || "").trim().slice(0, 600),
+          action: String(item?.action || "").trim().slice(0, 2000),
+          image: safeImage,
+          order: Math.max(1, Math.min(9999, Number(item?.order) || 1)),
+          visible: item?.visible !== false
+        };
+      }).filter(item => item.name)
+    };
+  }
   if (v.catalogCategories !== undefined) {
     if (!Array.isArray(v.catalogCategories) || v.catalogCategories.length > 300) return res.status(400).json({ ok: false, error: "catalogCategories must be an array (maximum 300)" });
     clean.catalogCategories = v.catalogCategories.map(x => String(x || "").trim().slice(0, 100)).filter(Boolean);
