@@ -1752,7 +1752,7 @@ function enableMeenaNotifications(){const order=localStorage.getItem('mmNotifyOr
  }
  async function load(){
   try{
-   const r=await fetch('/api/display-settings?ts='+Date.now(),{cache:'no-store'});if(!r.ok)return;
+   const r=await fetch('https://meenama-delivery-app-9681.onrender.com/api/display-settings?ts='+Date.now(),{cache:'no-store'});if(!r.ok)return;
    const v=await r.json();if(!v||typeof v!=='object')return;
    if(v.enabled===false){stopSlides();el.hidden=true;lastSignature='off';return;}
    if(el.hidden)el.hidden=false;
