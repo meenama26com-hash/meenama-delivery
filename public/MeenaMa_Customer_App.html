@@ -236,7 +236,7 @@ body{background:#f4f8f5!important;color:#202820}
   <div class="mm-offers-section"><div class="mm-best-title"><h3>Offers for You</h3><span>LIVE OFFERS</span></div><div id="mmOffers" class="mm-offers"><div class="mm-offer"><b>Offers loading…</b><br><span>Latest deals aa rahe hain.</span></div></div></div>
   <div class="mm-best-title"><h3>Best Deals</h3><span onclick="show('categories')">View All ›</span></div>
   <div class="mm-qc-products"><div id="homeProducts" class="grid"></div></div>
-  
+  <div id="mmDynamicSections"></div>
 </div>
 </section>
 <section id="categories" class="screen">
@@ -294,7 +294,7 @@ body{background:#f4f8f5!important;color:#202820}
 <button class="admin-tab" onclick="adminTab('feedbackAdmin')">⭐ Feedback</button>
 <button class="admin-tab" onclick="adminTab('settingsAdmin')">⚙️ Settings</button>
 </div>
-<div id="productsAdmin"><h3>Product Management</h3><div id="adminProductEditor"></div><button class="btn checkout" onclick="addProduct()">➕ Add New Product</button><button class="btn checkout" onclick="adminSaveProducts()">💾 Save Products</button></div>
+<div id="productsAdmin"><h3>Product Management</h3><div class="order-admin" id="mmSectionManager"><h3>🏷️ Home Section Manager</h3><p class="muted">Section ka naam add karein. Product edit karte waqt us section ko select karein.</p><div style="display:flex;gap:7px"><input id="mmNewSectionName" class="field" placeholder="New section name"><button class="btn checkout" style="width:auto" onclick="addHomeSection()">＋ Add</button></div><div id="mmSectionList"></div></div><div id="adminProductEditor"></div><button class="btn checkout" onclick="addProduct()">➕ Add New Product</button><button class="btn checkout" onclick="adminSaveProducts()">💾 Save Products</button></div>
 <div id="ordersAdmin" style="display:none"><h3>Customer Orders</h3><div id="adminOrders"></div><div id="invoiceBox"></div></div>
 <div id="feedbackAdmin" style="display:none"><h3>Customer Feedback</h3><div id="adminFeedback"></div></div><div id="settingsAdmin" style="display:none"><h3>⚙️ Delivery Settings</h3><label><b>Owner UPI ID</b></label><input id="ownerUpi" class="field" placeholder="yourname@upi"><button class="btn checkout" onclick="saveDeliverySettings()">💾 Save Settings</button><div class="notice">📍 Live distance ke liye customer location permission deni hogi. Is version me base area reference se ETA estimate kiya jayega; exact road routing ke liye maps/backend integration baad me joda ja sakta hai.</div></div>
 <button class="btn" style="margin-top:12px;width:100%;background:#eee" onclick="adminLogout()">Logout</button>
@@ -457,6 +457,20 @@ function filterProducts(){
 }
 function hideSuggestions(){const s=document.getElementById('searchSuggestions');if(s)s.style.display='none';}
 document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))hideSuggestions();});
+
+const MM_DEFAULT_HOME_SECTIONS=[
+{id:'bestsellers',name:'Bestsellers'},{id:'trending',name:'Trending Now'},{id:'fresh',name:'Fresh Today'},{id:'lifestyle',name:'Pick Your Lifestyle'},{id:'festival',name:'Festival Special'},{id:'deals',name:'Deals of the Day'},{id:'premium',name:'Premium Collection'},{id:'breakfast',name:'Breakfast Corner'},{id:'sweet',name:'Sweet Corner'},{id:'ration',name:'Monthly Ration'},{id:'baby',name:'Baby Care'},{id:'home',name:'Home Essentials'},{id:'bakery',name:'Bakery Corner'},{id:'stationery',name:'Stationery & More'},{id:'quick',name:'Quick Picks'},{id:'under99',name:'Under ₹99'},{id:'new',name:'New Arrivals'},{id:'combo',name:'Combo Offers'},{id:'recommended',name:'Recommended for You'},{id:'brands',name:'Shop by Brand'}
+];
+function getHomeSections(){try{const a=JSON.parse(localStorage.getItem('mmhomeSections')||'null');if(Array.isArray(a)&&a.length)return a;}catch(e){}localStorage.setItem('mmhomeSections',JSON.stringify(MM_DEFAULT_HOME_SECTIONS));return MM_DEFAULT_HOME_SECTIONS.slice();}
+function saveHomeSections(a){localStorage.setItem('mmhomeSections',JSON.stringify(a));renderHomeSections();renderSectionManager();}
+function safeHomeText(v){return String(v||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function renderHomeSections(){const el=document.getElementById('mmDynamicSections');if(!el)return;el.innerHTML=getHomeSections().map(sec=>{const items=products.filter(p=>p.homeSection===sec.id&&!/^Product Name \d+$/.test(p.name||''));if(!items.length)return '';return '<section class="section"><div class="mm-best-title"><h3>'+safeHomeText(sec.name)+'</h3><span onclick="openHomeSection(\''+sec.id+'\')">View All ›</span></div><div class="grid">'+items.slice(0,4).map(card).join('')+'</div></section>';}).join('');}
+function openHomeSection(id){const sec=getHomeSections().find(x=>x.id===id);if(!sec)return;const items=products.filter(p=>p.homeSection===id);document.getElementById('productHeading').textContent=sec.name;document.getElementById('products').innerHTML=items.map(card).join('')||'<div class="empty">Is section mein abhi product nahi hai.</div>';show('categories');}
+function addHomeSection(){const input=document.getElementById('mmNewSectionName'),name=(input&&input.value||'').trim();if(!name)return alert('Section ka naam likhiye.');const a=getHomeSections();a.push({id:'custom_'+Date.now().toString(36),name:name});saveHomeSections(a);input.value='';}
+function removeHomeSection(id){if(!confirm('Is Home Section ko hatana hai? Products delete nahi honge.'))return;saveHomeSections(getHomeSections().filter(x=>x.id!==id));}
+function moveHomeSection(id,dir){const a=getHomeSections(),i=a.findIndex(x=>x.id===id),j=i+dir;if(i<0||j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];saveHomeSections(a);}
+function renderSectionManager(){const el=document.getElementById('mmSectionList');if(!el)return;el.innerHTML=getHomeSections().map(x=>'<div style="display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid #e8eee9"><span style="flex:1">'+safeHomeText(x.name)+'</span><button class="btn" style="width:auto;padding:6px 9px" onclick="moveHomeSection(\''+x.id+'\',-1)">↑</button><button class="btn" style="width:auto;padding:6px 9px" onclick="moveHomeSection(\''+x.id+'\',1)">↓</button><button class="btn" style="width:auto;padding:6px 9px;background:#b42318" onclick="removeHomeSection(\''+x.id+'\')">×</button></div>').join('');}
+
 function renderHomeCategory(){
  const panel=document.getElementById('mmCategoryPanel');
  if(!panel)return;
@@ -479,6 +493,7 @@ function render(){
  filterProducts();
  const best=products.filter(p=>activeCategory==='All'||(p.category||'Grocery')===activeCategory);
  document.getElementById('homeProducts').innerHTML=best.slice(0,4).map(card).join('');
+ renderHomeSections(); renderSectionManager();
  renderHomeCategory();
  renderCart();
 }
@@ -604,6 +619,7 @@ function renderAdminProducts(){
  <input class="field ap-old" data-i="${i}" type="number" value="${p.old||0}" placeholder="MRP / Old Price">
  <input class="field ap-unit" data-i="${i}" value="${p.unit||''}" placeholder="Size / Unit">
  <input class="field ap-category" data-i="${i}" value="${p.category||'Grocery'}" placeholder="Category (e.g. Grocery, Dairy, Bakery)">
+ <select class="field ap-home-section" data-i="${i}"><option value="">Home section (optional)</option>${getHomeSections().map(x=>'<option value="'+x.id+'" '+(p.homeSection===x.id?'selected':'')+'>'+x.name+'</option>').join('')}</select>
  <input class="field ap-size" data-i="${i}" value="${p.size||''}" placeholder="Size (optional)">
  <input class="field ap-colour" data-i="${i}" value="${p.colour||''}" placeholder="Colour (optional)">
  <input class="field ap-rating" data-i="${i}" type="number" min="0" max="5" step="0.1" value="${p.rating??5}" placeholder="Star Rating 0–5">
@@ -620,6 +636,7 @@ function adminSaveProducts(){
  document.querySelectorAll('.ap-old').forEach(e=>products[+e.dataset.i].old=Number(e.value)||0);
  document.querySelectorAll('.ap-unit').forEach(e=>products[+e.dataset.i].unit=e.value);
  document.querySelectorAll('.ap-category').forEach(e=>products[+e.dataset.i].category=e.value.trim()||'Grocery');
+ document.querySelectorAll('.ap-home-section').forEach(e=>products[+e.dataset.i].homeSection=e.value);
  document.querySelectorAll('.ap-size').forEach(e=>products[+e.dataset.i].size=e.value.trim());
  document.querySelectorAll('.ap-colour').forEach(e=>products[+e.dataset.i].colour=e.value.trim());
  document.querySelectorAll('.ap-rating').forEach(e=>products[+e.dataset.i].rating=Math.max(0,Math.min(5,Number(e.value)||0)));
