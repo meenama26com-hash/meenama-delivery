@@ -16,7 +16,7 @@ next();
 const PORT = process.env.PORT || 3000;
 const DB = path.join(__dirname, "orders.json");
 
-app.use(express.json({ limit: "12mb" }));
+app.use(express.json({ limit: "30mb" }));
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const MEDIA_DIR = path.join(DATA_DIR, "media");
 fs.mkdirSync(MEDIA_DIR, { recursive: true });
