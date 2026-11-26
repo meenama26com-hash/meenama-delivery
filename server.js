@@ -14,10 +14,16 @@ return res.sendStatus(204);
 next();
 });
 const PORT = process.env.PORT || 3000;
-const DB = path.join(__dirname, "orders.json");
-
-app.use(express.json({ limit: "30mb" }));
 const DATA_DIR = process.env.DATA_DIR || __dirname;
+fs.mkdirSync(DATA_DIR, { recursive: true });
+function writeJson(file, value) {
+  const temp = file + ".tmp";
+  fs.writeFileSync(temp, JSON.stringify(value, null, 2));
+  fs.renameSync(temp, file);
+}
+const DB = path.join(DATA_DIR, "orders.json");
+
+app.use(express.json({ limit: "50mb" }));
 const MEDIA_DIR = path.join(DATA_DIR, "media");
 fs.mkdirSync(MEDIA_DIR, { recursive: true });
 app.use("/media", express.static(MEDIA_DIR, { maxAge: "1d", immutable: true }));
@@ -32,7 +38,7 @@ function readOrders() {
 }
 
 function saveOrders(orders) {
-  fs.writeFileSync(DB, JSON.stringify(orders, null, 2));
+  writeJson(DB, orders);
 }
 
 app.post("/api/delivery-login", (req, res) => {
@@ -52,10 +58,10 @@ app.get("/api/payment-settings", (req, res) => {
   res.json({ payeeName: "MeenaMa Delivery", merchantUpi: String(process.env.MEENAMA_MERCHANT_UPI || "Q11922473@ybl").trim() });
 });
 
-const PRICING_DB = path.join(__dirname, "delivery-settings.json");
+const PRICING_DB = path.join(DATA_DIR, "delivery-settings.json");
 const DEFAULT_PRICING = { deliveryMode: "slabs", deliveryPricingMode: "slabs", deliveryFee: 15, lowThreshold: 199, lowFee: 15, midThreshold: 499, midFee: 10, includedKm: 2, perKmFee: 5, minDeliveryFee: 15, maxDeliveryFee: 60, freeDeliveryAbove: 0, handlingFee: 0, platformFee: 0, surgeFee: 0, minimumOrder: 0, businessStatus: "open" };
 function readPricing() { try { return { ...DEFAULT_PRICING, ...JSON.parse(fs.readFileSync(PRICING_DB, "utf8")) }; } catch { return { ...DEFAULT_PRICING }; } }
-function savePricing(value) { const prior = readPricing(); const clean = { ...prior }; for (const key of ["deliveryFee","lowThreshold","lowFee","midThreshold","midFee","includedKm","perKmFee","minDeliveryFee","maxDeliveryFee","freeDeliveryAbove","handlingFee","platformFee","surgeFee","minimumOrder"]) { const raw = value[key] === undefined ? prior[key] : value[key]; const n = Number(raw); if (!Number.isFinite(n) || n < 0) return null; clean[key] = n; } clean.deliveryPricingMode = value.deliveryPricingMode === "distance" || value.deliveryMode === "distance" ? "distance" : (value.deliveryPricingMode || prior.deliveryPricingMode || "slabs"); clean.deliveryMode = clean.deliveryPricingMode === "distance" ? "distance" : (value.deliveryMode === "fixed" ? "fixed" : "slabs"); if (clean.midThreshold < clean.lowThreshold || clean.maxDeliveryFee < clean.minDeliveryFee) return null; clean.businessStatus = value.businessStatus === "closed" ? "closed" : "open"; fs.writeFileSync(PRICING_DB, JSON.stringify(clean, null, 2)); return clean; }
+function savePricing(value) { const prior = readPricing(); const clean = { ...prior }; for (const key of ["deliveryFee","lowThreshold","lowFee","midThreshold","midFee","includedKm","perKmFee","minDeliveryFee","maxDeliveryFee","freeDeliveryAbove","handlingFee","platformFee","surgeFee","minimumOrder"]) { const raw = value[key] === undefined ? prior[key] : value[key]; const n = Number(raw); if (!Number.isFinite(n) || n < 0) return null; clean[key] = n; } clean.deliveryPricingMode = value.deliveryPricingMode === "distance" || value.deliveryMode === "distance" ? "distance" : (value.deliveryPricingMode || prior.deliveryPricingMode || "slabs"); clean.deliveryMode = clean.deliveryPricingMode === "distance" ? "distance" : (value.deliveryMode === "fixed" ? "fixed" : "slabs"); if (clean.midThreshold < clean.lowThreshold || clean.maxDeliveryFee < clean.minDeliveryFee) return null; clean.businessStatus = value.businessStatus === "closed" ? "closed" : "open"; writeJson(PRICING_DB, clean); return clean; }
 app.get("/api/delivery-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readPricing()); });
 app.put("/api/delivery-settings", (req, res) => { const settings = savePricing(req.body || {}); if (!settings) return res.status(400).json({ ok: false, error: "Invalid delivery pricing settings" }); res.json({ ok: true, settings }); });
 // Backward-compatible alias used by the current green Admin HTML.
@@ -63,11 +69,12 @@ app.get("/api/settings", (req, res) => { res.setHeader("Cache-Control", "no-stor
 app.put("/api/settings", (req, res) => { const settings = savePricing(req.body || {}); if (!settings) return res.status(400).json({ ok: false, error: "Invalid delivery pricing settings" }); res.json({ ok: true, settings }); });
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, app: "MeenaMa Delivery API" });
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, app: "MeenaMa Delivery API", persistentStorage: Boolean(process.env.DATA_DIR), dataDirectoryConfigured: Boolean(process.env.DATA_DIR) });
 });
 
 // Shared product catalogue used by the existing Admin and Customer apps.
-const PRODUCTS_DB = path.join(__dirname, "products.json");
+const PRODUCTS_DB = path.join(DATA_DIR, "products.json");
 function readProducts() { try { const v = JSON.parse(fs.readFileSync(PRODUCTS_DB, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; } }
 function saveProducts(items) { fs.writeFileSync(PRODUCTS_DB, JSON.stringify(items, null, 2)); }
 app.get("/api/products", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json({ ok: true, products: readProducts() }); });
@@ -84,7 +91,7 @@ app.put("/api/products", (req, res) => {
 });
 
 // Shared Admin support data: extra settings, customer cases and festival display.
-const EXTRA_SETTINGS_DB = path.join(__dirname, "extra-settings.json");
+const EXTRA_SETTINGS_DB = path.join(DATA_DIR, "extra-settings.json");
 function readExtraSettings() { try { const v = JSON.parse(fs.readFileSync(EXTRA_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
 app.get("/api/extra-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readExtraSettings()); });
 app.put("/api/extra-settings", (req, res) => {
@@ -104,6 +111,24 @@ app.put("/api/extra-settings", (req, res) => {
     if (size > 10 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Catalog images are too large. Please use smaller images (10 MB total maximum)." });
     clean.categoryCatalogs = v.categoryCatalogs;
   }
+  if (v.mmBestsellerBuckets !== undefined) {
+    if (!Array.isArray(v.mmBestsellerBuckets) || v.mmBestsellerBuckets.length !== 4) return res.status(400).json({ ok: false, error: "mmBestsellerBuckets must contain exactly 4 collections" });
+    if (Buffer.byteLength(JSON.stringify(v.mmBestsellerBuckets), "utf8") > 10 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Bestseller catalog images are too large (10 MB maximum)." });
+    clean.mmBestsellerBuckets = v.mmBestsellerBuckets.map((b, i) => ({
+      name: String(b?.name || ("Collection " + (i + 1))).trim().slice(0, 100),
+      keys: String(b?.keys || "").trim().slice(0, 1000),
+      icon: String(b?.icon || "").slice(0, 30),
+      more: String(b?.more || "And More").slice(0, 50),
+      image: String(b?.image || "").slice(0, 200000),
+      images: Array.isArray(b?.images) ? b.images.slice(0, 6).map(x => String(x || "").slice(0, 200000)) : []
+    }));
+  }
+  if (v.mmProducts !== undefined) {
+    if (!Array.isArray(v.mmProducts) || v.mmProducts.length > 2000) return res.status(400).json({ ok: false, error: "mmProducts must be an array (maximum 2000)" });
+    if (Buffer.byteLength(JSON.stringify(v.mmProducts), "utf8") > 40 * 1024 * 1024) return res.status(413).json({ ok: false, error: "Legacy product data is too large." });
+    clean.mmProducts = v.mmProducts;
+  }
+  if (v.mmAutoSlidePermission !== undefined) clean.mmAutoSlidePermission = v.mmAutoSlidePermission === true;
   if (v.homePhotoCatalogs !== undefined) {
     if (!Array.isArray(v.homePhotoCatalogs) || v.homePhotoCatalogs.length !== 4) {
       return res.status(400).json({ ok: false, error: "homePhotoCatalogs must contain exactly 4 catalogs" });
@@ -176,15 +201,15 @@ app.put("/api/extra-settings", (req, res) => {
     }
     clean.mmShopStructure = v.mmShopStructure;
   }
-  fs.writeFileSync(EXTRA_SETTINGS_DB, JSON.stringify(clean, null, 2));
+  writeJson(EXTRA_SETTINGS_DB, clean);
   res.setHeader("Cache-Control", "no-store");
   res.json({ ok: true, settings: clean });
 });
 
-const CASES_DB = path.join(__dirname, "cases.json");
+const CASES_DB = path.join(DATA_DIR, "cases.json");
 function readCases() { try { const v = JSON.parse(fs.readFileSync(CASES_DB, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; } }
 app.get("/api/cases", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readCases()); });
-app.put("/api/cases", (req, res) => { const cases = req.body && req.body.cases; if (!Array.isArray(cases)) return res.status(400).json({ ok: false, error: "cases must be an array" }); if (cases.length > 5000) return res.status(413).json({ ok: false, error: "Too many cases" }); fs.writeFileSync(CASES_DB, JSON.stringify(cases, null, 2)); res.json({ ok: true, count: cases.length, cases }); });
+app.put("/api/cases", (req, res) => { const cases = req.body && req.body.cases; if (!Array.isArray(cases)) return res.status(400).json({ ok: false, error: "cases must be an array" }); if (cases.length > 5000) return res.status(413).json({ ok: false, error: "Too many cases" }); writeJson(CASES_DB, cases); res.json({ ok: true, count: cases.length, cases }); });
 
 // Owner-uploaded LED display media. Set DATA_DIR to a Render persistent disk mount (e.g. /var/data).
 app.post("/api/display-media", express.raw({ type: () => true, limit: "30mb" }), (req, res) => {
@@ -218,7 +243,7 @@ app.post("/api/display-media", express.raw({ type: () => true, limit: "30mb" }),
   }
 });
 
-const DISPLAY_SETTINGS_DB = path.join(__dirname, "display-settings.json");
+const DISPLAY_SETTINGS_DB = path.join(DATA_DIR, "display-settings.json");
 function readDisplaySettings() { try { const v = JSON.parse(fs.readFileSync(DISPLAY_SETTINGS_DB, "utf8")); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } }
 app.get("/api/display-settings", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json({ ...readDisplaySettings(), persistentStorage: Boolean(process.env.DATA_DIR) }); });
 app.put("/api/display-settings", (req, res) => {
@@ -253,18 +278,18 @@ app.put("/api/display-settings", (req, res) => {
     imageUrl: imageUrl.slice(0,2000),
     updatedAt: new Date().toISOString()
   };
-  fs.writeFileSync(DISPLAY_SETTINGS_DB, JSON.stringify(clean, null, 2));
+  writeJson(DISPLAY_SETTINGS_DB, clean);
   res.setHeader("Cache-Control", "no-store");
   res.json({ ok: true, settings: clean });
 });
 
-const DELIVERY_DB = path.join(__dirname, "delivery-status.json");
+const DELIVERY_DB = path.join(DATA_DIR, "delivery-status.json");
 function readDeliveryStatus() {
   try { return JSON.parse(fs.readFileSync(DELIVERY_DB, "utf8")); }
   catch { return { deliveryBoys: [] }; }
 }
 function saveDeliveryStatus(data) {
-  fs.writeFileSync(DELIVERY_DB, JSON.stringify(data, null, 2));
+  writeJson(DELIVERY_DB, data);
 }
 app.get("/api/delivery-status", (req, res) => {
   res.setHeader("Cache-Control", "no-store");
@@ -292,9 +317,9 @@ app.put("/api/delivery-status", (req, res) => {
   res.json({ ok: true, count: req.body.deliveryBoys.length });
 });
 
-const OFFERS_DB = path.join(__dirname, "offers.json");
+const OFFERS_DB = path.join(DATA_DIR, "offers.json");
 function readOffers() { try { const value = JSON.parse(fs.readFileSync(OFFERS_DB, "utf8")); return Array.isArray(value) ? value : []; } catch { return []; } }
-function saveOffers(offers) { fs.writeFileSync(OFFERS_DB, JSON.stringify(offers, null, 2)); }
+function saveOffers(offers) { writeJson(OFFERS_DB, offers); }
 app.get("/api/offers", (req, res) => { res.setHeader("Cache-Control", "no-store"); res.json(readOffers()); });
 app.put("/api/offers", (req, res) => {
   if (!req.body || !Array.isArray(req.body.offers)) return res.status(400).json({ ok: false, error: "offers must be an array" });
