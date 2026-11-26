@@ -41,6 +41,35 @@ function saveOrders(orders) {
   writeJson(DB, orders);
 }
 
+const DELIVERY_BOYS_DB = path.join(DATA_DIR, "delivery-boys.json");
+function readDeliveryBoys() {
+  try {
+    const value = JSON.parse(fs.readFileSync(DELIVERY_BOYS_DB, "utf8"));
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+}
+app.get("/api/delivery-boys", (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json(readDeliveryBoys());
+});
+app.put("/api/delivery-boys", (req, res) => {
+  const list = req.body?.deliveryBoys ?? req.body;
+  if (!Array.isArray(list) || list.length > 500) {
+    return res.status(400).json({ ok: false, error: "deliveryBoys must be an array of at most 500 entries." });
+  }
+  const clean = list.map((item) => ({
+    id: String(item?.id || "").trim().slice(0, 80),
+    name: String(item?.name || "").trim().slice(0, 120),
+    phone: String(item?.phone || "").trim().slice(0, 24),
+    addedAt: String(item?.addedAt || "").slice(0, 40)
+  })).filter((item) => item.id && item.name && /^\\+?[0-9]{10,15}$/.test(item.phone));
+  writeJson(DELIVERY_BOYS_DB, clean);
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, deliveryBoys: clean });
+});
+
 app.post("/api/delivery-login", (req, res) => {
   const mobile = String(req.body?.mobile || "").trim();
   const pin = String(req.body?.pin || "").trim();
